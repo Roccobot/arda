@@ -718,7 +718,7 @@ compaiono nella tab Mobile.
 - ⚠️ **Go-live che tocca sito E Worker: aspettare la spia `rev`** prima di salvare dal
   pannello, o la config nuova non viene scritta e quella vecchia si perde. Regola completa,
   col perché e con la trappola del bot Cloudflare, in
-  [`proxy/CLAUDE.md`](../../proxy/CLAUDE.md): là vive il Worker, e una seconda copia qui
+  `proxy/CLAUDE.md` del repo `Roccobot/roccobot.github.io`: là vive il Worker, e una seconda copia qui
   potrebbe divergere.
 - ⚠️ **Due criteri conviventi e una sola coppia di tab**: la piattaforma si decide sulla
   larghezza, ma `FX_PTR` (oggi il solo `hov`) e il gate del riflettore sulla **capacità del
@@ -1142,7 +1142,7 @@ righe**, al posto di `Classifica salvata` (istruzione dell'utente, 2026-09-11).
   nel client, nel `localStorage`, nel codice o nelle variabili d'ambiente
   dell'ambiente cloud.
 - ⚠️ **Rate limiting, spia `rev` e redistribuzione del Worker: vedi**
-  [`proxy/CLAUDE.md`](../../proxy/CLAUDE.md). Quelle regole riguardano il Worker, non il
+  `proxy/CLAUDE.md` del repo `Roccobot/roccobot.github.io`. Quelle regole riguardano il Worker, non il
   sito, e vivono là per non avere due fonti di verità.
 
 ## 🧭 Vocabolario strutturale (Tipo, Categoria, Classe, Badge)
