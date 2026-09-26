@@ -721,7 +721,7 @@ compaiono nella tab Mobile.
 - ⚠️ **Go-live che tocca sito E Worker: aspettare la spia `rev`** prima di salvare dal
   pannello, o la config nuova non viene scritta e quella vecchia si perde. Regola completa,
   col perché e con la trappola del bot Cloudflare, in
-  `proxy/CLAUDE.md` del repo `Roccobot/roccobot.github.io`: là vive il Worker, e una seconda copia qui
+  `worker/CLAUDE.md`: là vive il Worker, e una seconda copia qui
   potrebbe divergere.
 - ⚠️ **Due criteri conviventi e una sola coppia di tab**: la piattaforma si decide sulla
   larghezza, ma `FX_PTR` (oggi il solo `hov`) e il gate del riflettore sulla **capacità del
@@ -1145,7 +1145,7 @@ righe**, al posto di `Classifica salvata` (istruzione dell'utente, 2026-09-11).
   nel client, nel `localStorage`, nel codice o nelle variabili d'ambiente
   dell'ambiente cloud.
 - ⚠️ **Rate limiting, spia `rev` e redistribuzione del Worker: vedi**
-  `proxy/CLAUDE.md` del repo `Roccobot/roccobot.github.io`. Quelle regole riguardano il Worker, non il
+  `worker/CLAUDE.md`. Quelle regole riguardano il Worker, non il
   sito, e vivono là per non avere due fonti di verità.
 
 ## 🧭 Vocabolario strutturale (Tipo, Categoria, Classe, Badge)
@@ -1377,12 +1377,12 @@ Corollari (bonifica completa v3.53, audit 2026-07-03):
 per ciascuna, tre config scritte dal Worker e **preservate** dai salvataggi che non le inviano:
 `cardColors`, `badgeAdjust`, `siteFlags`. Serializzazione: `datiVersion` in prima riga, poi **una
 voce JSON per riga**, così i diff su GitHub sono per-personaggio, e identica sia a mano sia dal
-Worker. I salvataggi passano dal **Worker** `proxy/arda-admin-proxy.js`: il browser invia `dati` +
+Worker. I salvataggi passano dal **Worker** `worker/arda-admin-proxy.js`: il browser invia `dati` +
 parola d'ordine, il Worker valida, legge lo SHA e riscrive l'intero file con un PUT (race-safe).
 ⚠️ Il Worker scrive nel repo `roccobot/arda` (`REPO`) sul file `dati.js` alla radice (`FILE_PATH`),
 dal suo `rev` 17: **se il file dati si sposta, va riallineato là**. L'URL del Worker è in `ADMIN_PROXY_URL_DEFAULT` (non segreto), sovrascrivibile
 dal campo 'Proxy' dell'editor; la parola d'ordine vive **solo in memoria** per la durata della
-sessione. Deploy e secret in `proxy/README.md`.
+sessione. Deploy e secret in `worker/README.md`.
 
 ### 🧹 Il campo paese è uscito dal dataset
 
