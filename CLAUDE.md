@@ -1,19 +1,24 @@
-# CLAUDE.md: 'I Grandi di Arda' (`arda/top/`)
+# CLAUDE.md: 'I Grandi di Arda' (repo `Roccobot/arda`)
 
 > **Cos'è questo file.** Le regole del progetto **'I Grandi di Arda'**
-> (<https://roccobot.github.io/arda/top/>): aspetto, struttura dei dati, canone,
-> badge, asset e note. Si carica quando si legge un file di questa cartella.
+> (<https://roccobot.github.io/arda/>): aspetto, struttura dei dati, canone,
+> badge, asset e note.
 > ⚠️ Le regole **trasversali** (protocollo di avvio, scala di priorità, regole non
-> derogabili, lingua, git e go-live) vivono nel `CLAUDE.md` di **root**, che si
-> carica sempre: quello resta l'hub, e questo file non lo sostituisce.
+> derogabili, lingua, git e go-live) vivono nel `CLAUDE.md` di root di
+> `Roccobot/roccobot.github.io`: quello resta l'hub, e questo file non lo sostituisce.
+> ⚠️ **Dalla `15.70` (2026-09-26) il sito vive in un repo suo**: prima era la cartella
+> `arda/top/` del sito di base, all'indirizzo `roccobot.github.io/arda/top/`. Il contenuto
+> di `top/` è passato alla radice, `res/` è rimasta dov'era (i suoi indirizzi non sono
+> cambiati), e in `top/` resta una sola paginetta che rimanda al nuovo indirizzo conservando
+> parametri e ancora, per i link salvati e le app installate. Il ramo è `main`.
 
 ## ⚠️⚠️⚠️ SI MODIFICANO `index.src.html` E `admin.src.js`: `index.html` E `admin.js` SONO GENERATI
 
 Dalla `15.64` (collaudo del 2026-09-25, approvato dall'utente), come Terramare dalla `2.70`. Il
 sorgente commentato è **`index.src.html`**, e il codice dell'amministrazione vive in
 **`admin.src.js`**; la pagina pubblicata (**`index.html`**) e **`admin.js`** li genera la GitHub
-Action `.github/workflows/arda-minify.yml` con `.github/scripts/minify.mjs arda/top` a ogni push
-su `master` che tocca i sorgenti, e li committa lei (`github-actions[bot]`). Il perché è il peso:
+Action `.github/workflows/arda-minify.yml` con `.github/scripts/minify.mjs .` a ogni push
+su `main` che tocca i sorgenti, e li committa lei (`github-actions[bot]`). Il perché è il peso:
 i commenti erano il 41% del codice servito, e la pagina compressa scende da 252 a **71,9 KB**.
 
 - ⚠️⚠️ **In tutto questo file, 'index.html' vuol dire il SORGENTE**: le note sono nate prima
@@ -28,7 +33,7 @@ i commenti erano il 41% del codice servito, e la pagina compressa scende da 252 
   Una funzione nuova dell'amministrazione va in `admin.src.js`; se il codice pubblico ne
   chiamasse direttamente un'altra, serve un secondo segnaposto. Le variabili che fotografano la
   configurazione al caricamento (`*_SAVED`) restano nel sorgente principale.
-- **Chi prova in locale** lancia `node .github/scripts/minify.mjs arda/top` dalla radice (con
+- **Chi prova in locale** lancia `node .github/scripts/minify.mjs .` dalla radice (con
   esbuild) e serve la cartella come sempre.
 - **Certificazione della `15.64`**: stato finale delle 249 card identico alla `15.63` su 21
   larghezze da 1280 a 320, stesse aperture dell'area admin con lo stesso esito, `admin.js`
@@ -157,7 +162,7 @@ Gli strumenti vivono accanto a `svgNodo`, e sono uno per **provenienza** del tes
 ## 🏷️ Come si chiama questo progetto
 
 **Tre nomi, tutti buoni e interscambiabili** (istruzione dell'utente, 2026-07-30): **'Arda
-Top'** (dalla cartella `arda/top/`), **'I Grandi di Arda'** (il titolo che si legge nel sito) e
+Top'** (dalla cartella `arda/top/` del sito di base, dove il progetto ha vissuto fino alla `15.70`), **'I Grandi di Arda'** (il titolo che si legge nel sito) e
 **'Arda'** e basta. Non c'è un nome corretto e due tollerati: sono sinonimi, e nessuno dei tre
 va corretto quando l'utente usa l'altro.
 
@@ -171,7 +176,7 @@ va corretto quando l'utente usa l'altro.
 
 ## 🔢 Versione del sito
 
-**Com'è fatto.** **Fonte unica: `var datiVersion` in testa a `arda/top/dati.js`.** Il sito la legge
+**Com'è fatto.** **Fonte unica: `var datiVersion` in testa a `dati.js`.** Il sito la legge
 a runtime (`setVersionBadge`) e la scrive nel badge della testata; gli specchi nel Pannello la
 **ereditano dal badge**. Il numero scritto a mano nel badge HTML resta **solo come fallback** se
 `dati.js` non carica. ⚠️ **Mai reintrodurre un secondo numero hardcoded 'vivo' altrove**: storico,
@@ -208,7 +213,7 @@ serve.
   previsto dal `CLAUDE.md` di root (che resta il primo e vale per ogni progetto):
 
   ```bash
-  git pull origin master && grep -oE 'vb-v">v</span>[0-9.]+' arda/top/index.html | head -1
+  git pull origin main && grep -oE 'vb-v">v</span>[0-9.]+' index.html | head -1
   ```
 
   Legge la versione dal badge: se dopo il pull risulta più vecchia dell'attesa, fermarsi e
@@ -253,10 +258,10 @@ serve.
 ## 📲 App installabile (PWA)
 
 **Com'è fatto** (dalla v15.03; splash e icona adattiva assestati nella v15.05).
-`arda/top/manifest.webmanifest` (nome **'Arda Roccobot'**, `short_name` 'Arda',
-`display: standalone`, scope e `start_url` su `/arda/top/`), **due** icone in `arda/top/pwa/`
+`manifest.webmanifest` (nome **'Arda Roccobot'**, `short_name` 'Arda',
+`display: standalone`, scope e `start_url` su `/arda/`, fino alla `15.69` su `/arda/top/`), **due** icone in `pwa/`
 (192 e 512, `purpose: "any maskable"`), `apple-touch-icon` per iOS che il manifest non guarda, e
-`arda/top/sw.js`. Le icone **non sono un disegno a parte: sono il glifo del FAB**, estratto da
+`sw.js`. Le icone **non sono un disegno a parte: sono il glifo del FAB**, estratto da
 `index.html` e rasterizzato da `.memo/scripts/pwaicons.js`. Colori dal FAB reale: turchese
 `#1f5562` con glifo bianco.
 
@@ -303,7 +308,7 @@ serve.
 
 **Com'è fatta** (dalla v15.06). Il **glifo del FAB** su trasparente, senza tondo né fondo, generato da
 `.memo/scripts/favicon.js` che lo estrae da `index.html` come già fa `pwaicons.js`: quattro file
-in `arda/top/`, un `favicon.svg` per i browser moderni e i PNG **48, 32 e 16** come fallback,
+alla radice del repo, un `favicon.svg` per i browser moderni e i PNG **48, 32 e 16** come fallback,
 tutti referenziati in testa alla pagina. Il colore è **`#ce9d3b`**, un gradino sotto l'oro del FAB.
 
 - ⚠️⚠️ **La tinta l'ha SCELTA L'UTENTE A OCCHIO, e non si ritocca per contrasto** (2026-08-18:
@@ -774,7 +779,7 @@ compaiono nella tab Mobile.
 - ⚠️ **CASO CHIUSO, non è un difetto: 'spento su mobile, e lo trovo spento anche su desktop'.**
   Il Pannello scrive sempre e solo la variante giusta, accertato sui dati e dal vivo; l'equivoco
   è legittimo perché il Pannello non mostra lo stato dell'ALTRA variante. Se ricapita,
-  ricostruire la storia delle due chiavi con `git show <commit>:arda/top/dati.js`, che è l'unica
+  ricostruire la storia delle due chiavi con `git show <commit>:dati.js` (per i commit anteriori alla `15.70`, nel repo del sito: `git show <commit>:arda/top/dati.js`), che è l'unica
   prova diretta di che cosa ha scritto un salvataggio.
 - ⚠️ **`fade` (bordi lista in dissolvenza) NON esiste più**, sostituito dal riflettore su
   richiesta dell'utente: non reintrodurlo, ed è altra cosa dalla manopola `fade` della trama.
@@ -1364,15 +1369,15 @@ Corollari (bonifica completa v3.53, audit 2026-07-03):
 
 ## 🗃️ Struttura dati
 
-**Com'è fatto.** L'array `dati` vive in **`arda/top/dati.js`** (`var dati = [...]`), caricato da
+**Com'è fatto.** L'array `dati` vive in **`dati.js`** (`var dati = [...]`), caricato da
 `index.html` **prima** dello script principale, sincrono e bloccante. Nello stesso file, una riga
 per ciascuna, tre config scritte dal Worker e **preservate** dai salvataggi che non le inviano:
 `cardColors`, `badgeAdjust`, `siteFlags`. Serializzazione: `datiVersion` in prima riga, poi **una
 voce JSON per riga**, così i diff su GitHub sono per-personaggio, e identica sia a mano sia dal
 Worker. I salvataggi passano dal **Worker** `proxy/arda-admin-proxy.js`: il browser invia `dati` +
 parola d'ordine, il Worker valida, legge lo SHA e riscrive l'intero file con un PUT (race-safe).
-⚠️ Il `FILE_PATH` del Worker punta a `arda/top/dati.js`: **se il file dati si sposta, va
-riallineato là**. L'URL del Worker è in `ADMIN_PROXY_URL_DEFAULT` (non segreto), sovrascrivibile
+⚠️ Il Worker scrive nel repo `roccobot/arda` (`REPO`) sul file `dati.js` alla radice (`FILE_PATH`),
+dal suo `rev` 17: **se il file dati si sposta, va riallineato là**. L'URL del Worker è in `ADMIN_PROXY_URL_DEFAULT` (non segreto), sovrascrivibile
 dal campo 'Proxy' dell'editor; la parola d'ordine vive **solo in memoria** per la durata della
 sessione. Deploy e secret in `proxy/README.md`.
 
@@ -1768,7 +1773,7 @@ dell'istruzione dell'utente 'devi fare le prove col **FONT** reale'.
 
 ## 🚩 Feature flag (elementi disattivati, ma non rimossi)
 
-Oggetto **`FEATURES`** in testa allo script di `arda/top/index.html`: interruttori per spegnere
+Oggetto **`FEATURES`** in testa allo script di `index.html`: interruttori per spegnere
 elementi senza cancellarli. ⚠️ **Non sono bug né codice morto**, sono scelte deliberate, ed è per
 questo che sono elencate qui.
 
@@ -2117,7 +2122,7 @@ motivate**, perché nei dati un'esclusione è indistinguibile da una dimenticanz
 
 ## 🖼️ L'anteprima social (Open Graph)
 
-`arda/top/og-image.jpg`, **1200x630**, fornita dall'utente. **Sostituita il 2026-08-24**
+`og-image.jpg`, **1200x630**, fornita dall'utente. **Sostituita il 2026-08-24**
 (`15.13`): era l'Occhio di Sauron in un anello di fuoco, ora è un re elfico in armatura
 dorata con la spada sguainata. ⚠️ Sostituendo l'immagine si riscrive anche `og:image:alt`,
 che descrive il **disegno**: lasciarlo com'era significa mentire a chi usa uno screen reader.
@@ -2234,7 +2239,7 @@ PNG originali conservati come backup non referenziato.
 ## 📝 Note e Note editoriali (modale 'Risorse e note')
 
 **Com'è fatto.** Approfondimenti bilingui in **un'unica modale**, con due accessi: il link nel
-footer e il tasto Info. Le note vivono nell'array **`EDITORIAL_NOTES`** in `arda/top/index.html`,
+footer e il tasto Info. Le note vivono nell'array **`EDITORIAL_NOTES`** in `index.html`,
 accanto a `openResourcesModal`; il viewer è `openNoteViewer`. Aggiungere una nota = aggiungere un
 oggetto, e pulsante e viewer si generano da soli; ogni oggetto ha titolo pieno, **etichetta breve
 per mobile (obbligatoria)**, la categoria `'lore'` o `'editorial'` e i due corpi HTML. Note,

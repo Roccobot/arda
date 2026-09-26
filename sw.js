@@ -11,7 +11,7 @@
 // `dati.js` cambia a ogni salvataggio dell'editor admin e a ogni bump di
 // versione: il sito servirebbe la classifica vecchia con il deploy tutto verde e
 // la sonda su file grezzo che conferma la pubblicazione. Chi vuole aggiungere
-// una cache legga prima quella trappola in `arda/top/CLAUDE.md`.
+// una cache legga prima quella trappola in `CLAUDE.md`.
 //
 // ⚠️ Un service worker registrato SOPRAVVIVE alla rimozione del file: se un
 // domani lo si cancella, va disattivato anche per chi ce l'ha già (unregister),
