@@ -182,6 +182,9 @@ a runtime (`setVersionBadge`) e la scrive nel badge della testata; gli specchi n
 `dati.js` non carica. ⚠️ **Mai reintrodurre un secondo numero hardcoded 'vivo' altrove**: storico,
 il pannello restò fermo a v5.11.0 per mesi.
 
+**La sonda di pubblicazione** è quel campo su <https://roccobot.github.io/arda/dati.js>, letto con
+`Cache-Control: no-cache`: dalla `15.70` l'indirizzo non ha più `top`.
+
 **Schema SlimVer `x.xx`**: nato qui e promosso il 2026-08-01 a **default universale dei
 progetti** col suo nome (regole di bump e convenzione di lettura in `Roccobot.md`,
 § '🌿 Workflow git e versioni': +0,01 secondaria, +0,1 funzionalità, +1,0 maggiore, riporto a
