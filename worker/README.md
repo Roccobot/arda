@@ -110,3 +110,12 @@ curl -s -X POST https://arda-admin-proxy.<sub>.workers.dev \
 - CORS limitato a `ALLOWED_ORIGIN`.
 - Lo scope minimo del PAT (un solo repo, solo Contents) limita il danno
   massimo a quel repository.
+
+## Dopo un ricollegamento della Git integration
+
+⚠️ **Ricollegare il repo in dashboard NON avvia una build** (misurato il 2026-09-26, spostando i
+due Worker nei repo dei loro siti): la spia `rev` resta quella di prima finché non arriva un
+push che tocca `worker/`, oppure finché non si avvia una build a mano dalla scheda delle build.
+La verifica è sempre la spia: un GET al Worker deve mostrare il `rev` del codice appena
+pubblicato. L'avviso *logpush is not enabled for this account* che la pagina delle impostazioni
+mostra a ogni apertura riguarda l'esportazione dei log, a pagamento, e non c'entra.
