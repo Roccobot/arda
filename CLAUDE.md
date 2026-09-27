@@ -26,7 +26,7 @@ i commenti erano il 41% del codice servito, e la pagina compressa scende da 252 
   `index.html` trova codice minificato, e una modifica fatta lì la cancella il build successivo.
 - **Il badge di ripiego si scrive nel sorgente**, e `datiVersion` resta in `dati.js`: il bump
   tocca `index.src.html` e `dati.js`, e `index.html` lo segue da sé. Il controllo del badge
-  (gli hook di Claude, in `.memo/scripts/hook.py` del repo dell'hub) legge il badge dal
+  (gli hook di Claude, in `.memo/scripts/hooks.py` del repo dell'hub) legge il badge dal
   sorgente, e così `scripts/favicon.js` e `scripts/pwaicons.js`.
 - ⚠️⚠️ **Il codice admin si scarica al PRIMO INGRESSO**: 31 funzioni e 4 tabelle costanti,
   trovate col grafo delle chiamate perché raggiungibili solo da `openAdminGate`. Nel sorgente
