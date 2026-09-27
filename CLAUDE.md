@@ -25,8 +25,9 @@ i commenti erano il 41% del codice servito, e la pagina compressa scende da 252 
   dello sdoppiamento, e i numeri di riga che citano valgono in `index.src.html`. Chi apre
   `index.html` trova codice minificato, e una modifica fatta lì la cancella il build successivo.
 - **Il badge di ripiego si scrive nel sorgente**, e `datiVersion` resta in `dati.js`: il bump
-  tocca `index.src.html` e `dati.js`, e `index.html` lo segue da sé. Gli hook di
-  `.claude/settings.json` leggono il badge dal sorgente, e così `favicon.js` e `pwaicons.js`.
+  tocca `index.src.html` e `dati.js`, e `index.html` lo segue da sé. Il controllo del badge
+  (gli hook di Claude, in `.memo/scripts/ganci.py` del repo dell'hub) legge il badge dal
+  sorgente, e così `scripts/favicon.js` e `scripts/pwaicons.js`.
 - ⚠️⚠️ **Il codice admin si scarica al PRIMO INGRESSO**: 31 funzioni e 4 tabelle costanti,
   trovate col grafo delle chiamate perché raggiungibili solo da `openAdminGate`. Nel sorgente
   resta un segnaposto `openAdminGate` che, con `caricaAdmin`, carica `admin.js` una volta sola.
@@ -229,7 +230,7 @@ serve.
   confronto dei ref col remoto. Caso reale: il commit admin `db3f453` ('modifica testi
   personaggi') toccò solo `dati.js` lasciando la versione a `v10.13.6`, e il solo `grep` del
   badge non l'avrebbe colto.
-- ⚠️ **Le salvaguardie in `.claude/settings.json` intercettano solo il DISALLINEAMENTO** fra badge e
+- ⚠️ **Le salvaguardie degli hook di Claude intercettano solo il DISALLINEAMENTO** fra badge e
   `datiVersion` (avviso a inizio sessione, e blocco del commit se differiscono): **non** decidono
   l'entità del bump, che resta scelta manuale e contestuale.
 - ⚠️ **La `v` del badge è allineata OTTICAMENTE alla `r` di roccobot.me**: a padding identici
@@ -255,8 +256,8 @@ serve.
   è **bi-formato** (gestisce anche il legacy `x.y.z`) per non rompere la transizione.
 - **Il bivio modale sul tap della versione mobile è stato RIMOSSO**, perché su mobile il riordino si
   attivava ma non si poteva salvare: ora tutti i punti d'accesso vanno dritti all'editor.
-- Il codice del Worker si ridistribuisce **da sé** a ogni push su `master` via la Git integration di
-  Cloudflare; `wrangler deploy` resta solo come fallback manuale.
+- Il codice del Worker si ridistribuisce **da sé** a ogni push su `main` che tocca `worker/`, via la
+  Git integration di Cloudflare; `wrangler deploy` resta solo come fallback manuale.
 
 ## 📲 App installabile (PWA)
 
@@ -265,7 +266,7 @@ serve.
 `display: standalone`, scope e `start_url` su `/arda/`, fino alla `15.69` su `/arda/top/`), **due** icone in `pwa/`
 (192 e 512, `purpose: "any maskable"`), `apple-touch-icon` per iOS che il manifest non guarda, e
 `sw.js`. Le icone **non sono un disegno a parte: sono il glifo del FAB**, estratto da
-`index.html` e rasterizzato da `.memo/scripts/pwaicons.js`. Colori dal FAB reale: turchese
+`index.html` e rasterizzato da `scripts/pwaicons.js`. Colori dal FAB reale: turchese
 `#1f5562` con glifo bianco.
 
 - ⚠️⚠️ **L'icona è ADATTIVA, quindi NON porta nessuna forma propria** (istruzione dell'utente,
@@ -310,7 +311,7 @@ serve.
 ## 🔖 Favicon
 
 **Com'è fatta** (dalla v15.06). Il **glifo del FAB** su trasparente, senza tondo né fondo, generato da
-`.memo/scripts/favicon.js` che lo estrae da `index.html` come già fa `pwaicons.js`: quattro file
+`scripts/favicon.js` che lo estrae da `index.html` come già fa `pwaicons.js`: quattro file
 alla radice del repo, un `favicon.svg` per i browser moderni e i PNG **48, 32 e 16** come fallback,
 tutti referenziati in testa alla pagina. Il colore è **`#ce9d3b`**, un gradino sotto l'oro del FAB.
 
@@ -460,7 +461,8 @@ secondo tocco si **trascina senza staccare il dito**, verso il basso per ingrand
 - ⚠️ **Solo per il dito** (`pointerType === 'touch'`): col mouse ci sono la rotella e il doppio
   clic, e un trascinamento col tasto premuto deve restare pan. Un **secondo dito** annulla il
   gesto e passa la mano al pinch.
-- ⚠️⚠️ **Il banco `.memo/scripts/prova-gesto-zoom.js` serve i DUE siti**, scegliendo il
+- ⚠️⚠️ **Il banco `prova-gesto-zoom.js` serve i DUE siti**, e per questo vive in `.memo/scripts/` del
+  repo dell'hub (`Roccobot/roccobot.github.io`); scegliendo il
   soggetto con `PROVA_IMG`, e usa eventi touch **veri** via CDP: i sintetici non bastano, perché il
   viewer chiama `setPointerCapture` a ogni `pointerdown` e quel metodo **rifiuta** un
   `pointerId` che il browser non conosce, quindi il gestore va in errore prima di fare
@@ -589,7 +591,8 @@ aprire il Pannello.
     come quello del gesto di zoom: prova cinque casi, e i **tre 'no' contano quanto i due
     'sì'** (click breve, click lento a 550ms, tasto destro premuto, pressione trascinata).
     Misura del 2026-09-09: 9 su 9 su entrambi.
-- ⚠️⚠️ **Il banco è `.memo/scripts/prova-ricerca-sito.js`, con eventi touch VERI via CDP**,
+- ⚠️⚠️ **Il banco è `prova-ricerca-sito.js`, in `.memo/scripts/` del repo dell'hub perché serve
+  i due siti, con eventi touch VERI via CDP**,
   come quello del gesto di zoom e per la stessa ragione: il tocco lungo vive su un
   `pointerdown` con `pointerType` `touch`, e un evento sintetico non lo sveglia. Serve i **due
   siti** e prova i tre pezzi insieme (gesto del FAB, ricerca, voci nascoste), perché si reggono
@@ -1751,10 +1754,11 @@ dell'istruzione dell'utente 'devi fare le prove col **FONT** reale'.
   caricato (dice solo che *qualcosa* può rendere quel testo). L'unica spia
   affidabile è **`document.fonts.size`** (0 = nessuna webfont) o il conto degli
   elementi con `status === 'loaded'`.
-- **L'aggancio è COMMITTATO, non da riscrivere ogni volta: `.memo/scripts/realfont.js`**
-  (sotto una cartella col punto, quindi Pages non lo pubblica). Fa tutto da sé: scarica il
+- **L'aggancio è COMMITTATO, non da riscrivere ogni volta: `.memo/scripts/realfont.js`** del
+  repo dell'hub, che serve anche Terramare (stesse tre famiglie). Fa tutto da sé: scarica il
   CSS di Google Fonts e i `.woff2` con `curl` + UA da browser, li mette in cache fuori dal
-  repo, serve repo e font via HTTP, e con `attach(page)` dirotta la richiesta del browser
+  repo, serve via HTTP la cartella che contiene i repo (la pagina ha lo stesso indirizzo di
+  produzione, sotto `arda/`) e i font, e con `attach(page)` dirotta la richiesta del browser
   sui file locali. `ready(page)` è la spia: attesi **n 28**, ≥9 `loaded`, famiglie
   `Cinzel`/`Cinzel Decorative`/`EB Garamond`.
   - ⚠️ Serve **HTTP**: i font da `file://` sono bloccati dal browser.
