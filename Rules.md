@@ -1,8 +1,12 @@
-# CLAUDE.md: 'I Grandi di Arda' (repo `Roccobot/arda`)
+# Rules.md: 'I Grandi di Arda' (repo `Roccobot/arda`)
 
-> **Cos'è questo file.** Le regole del progetto **'I Grandi di Arda'**
+> **Cos'è questo file.** Il testo completo delle regole del progetto **'I Grandi di Arda'**
 > (<https://roccobot.github.io/arda/>): aspetto, struttura dei dati, canone,
-> badge, asset e note.
+> badge, asset e note. Vale per **tutti gli agenti**: il nucleo, cioè ogni regola in una riga,
+> vive in `AGENTS.md`, e questo file ne dà il perché. Claude Code lo carica da sé, perché
+> `CLAUDE.md` lo importa; gli altri agenti lo leggono quando il lavoro tocca una sua sezione.
+> ⚠️ **Fino al 2026-09-27 questo testo era il `CLAUDE.md` del repo**: una nota che nomina il
+> `CLAUDE.md` del repo `Roccobot/arda` per una di queste sezioni parla di questo file.
 > ⚠️ Le regole **trasversali** (protocollo di avvio, scala di priorità, regole non
 > derogabili, lingua, git e go-live) vivono nel `CLAUDE.md` di root di
 > `Roccobot/roccobot.github.io`: quello resta l'hub, e questo file non lo sostituisce.

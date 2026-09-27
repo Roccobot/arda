@@ -1,7 +1,13 @@
-# CLAUDE.md: Worker di amministrazione (`worker/`)
+# Rules.md: Worker di amministrazione (`worker/`)
 
-> **Cos'è questo file.** Le regole dei **Cloudflare Worker** che fanno da proxy ai
-> salvataggi delle aree admin. Qui vive `arda-admin-proxy`; il suo gemello vive in `worker/` del repo
+> **Cos'è questo file.** Il testo completo delle regole dei **Cloudflare Worker** che fanno da
+> proxy ai salvataggi delle aree admin. Vale per **tutti gli agenti**: il nucleo, cioè ogni
+> regola in una riga, vive in `worker/AGENTS.md`, e questo file ne dà il perché. Claude Code lo
+> carica da sé, perché `worker/CLAUDE.md` lo importa; gli altri agenti lo leggono quando il
+> lavoro tocca una sua sezione.
+> ⚠️ **Fino al 2026-09-27 questo testo era il `worker/CLAUDE.md` del repo**: una nota che nomina
+> il `worker/CLAUDE.md` del repo `Roccobot/arda` per una di queste sezioni parla di questo file.
+> Qui vive `arda-admin-proxy`; il suo gemello vive in `worker/` del repo
 > `Roccobot/earthsea`, con una copia di questo stesso file: **chi corregge una copia guardi
 > l'altra**. Le regole trasversali vivono nel `CLAUDE.md` di root di
 > `Roccobot/roccobot.github.io`, e il formato dei dati che il Worker di Arda scrive nel
