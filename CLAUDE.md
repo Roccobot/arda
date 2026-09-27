@@ -461,7 +461,7 @@ secondo tocco si **trascina senza staccare il dito**, verso il basso per ingrand
 - ⚠️ **Solo per il dito** (`pointerType === 'touch'`): col mouse ci sono la rotella e il doppio
   clic, e un trascinamento col tasto premuto deve restare pan. Un **secondo dito** annulla il
   gesto e passa la mano al pinch.
-- ⚠️⚠️ **Il banco `prova-gesto-zoom.js` serve i DUE siti**, e per questo vive in `.memo/scripts/` del
+- ⚠️⚠️ **Il banco `test-zoom-gesture.js` serve i DUE siti**, e per questo vive in `.memo/scripts/` del
   repo dell'hub (`Roccobot/roccobot.github.io`); scegliendo il
   soggetto con `PROVA_IMG`, e usa eventi touch **veri** via CDP: i sintetici non bastano, perché il
   viewer chiama `setPointerCapture` a ogni `pointerdown` e quel metodo **rifiuta** un
@@ -591,7 +591,7 @@ aprire il Pannello.
     come quello del gesto di zoom: prova cinque casi, e i **tre 'no' contano quanto i due
     'sì'** (click breve, click lento a 550ms, tasto destro premuto, pressione trascinata).
     Misura del 2026-09-09: 9 su 9 su entrambi.
-- ⚠️⚠️ **Il banco è `prova-ricerca-sito.js`, in `.memo/scripts/` del repo dell'hub perché serve
+- ⚠️⚠️ **Il banco è `test-site-search.js`, in `.memo/scripts/` del repo dell'hub perché serve
   i due siti, con eventi touch VERI via CDP**,
   come quello del gesto di zoom e per la stessa ragione: il tocco lungo vive su un
   `pointerdown` con `pointerType` `touch`, e un evento sintetico non lo sveglia. Serve i **due
