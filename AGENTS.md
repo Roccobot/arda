@@ -286,8 +286,9 @@ Un file più specifico vince **dove parla**, e il suo silenzio non è una deroga
   non rimossi)').
 - **I font reali nell'ambiente di prova**: le webfont non si caricano da sole, e l'aggancio è
   `realfont.js` in `.memo/scripts/` dell'hub; `document.fonts.check()` mente, fa fede
-  `document.fonts.size`. axe non valuta il contrasto sulle card: là si misura sui pixel
-  (`Rules.md` § '🔬 Misure tipografiche: servire i font REALI ai test').
+  `document.fonts.size` (`Rules.md` § '🔬 Misure tipografiche: servire i font REALI ai test').
+  axe non valuta il contrasto sulle card: là si misura sui pixel (`Rules.md`
+  § '🎨 Colore card (sistema cardcolor)').
 - **Diverse funzioni sono nate insieme a 'I Grandi di Terramare'** e ne condividono codice o
   testo (il titolone, il messaggio del salvataggio dell'ordine): si cambiano sui due siti
   insieme. I banchi `test-zoom-gesture.js` e `test-site-search.js` vivono nell'hub perché
