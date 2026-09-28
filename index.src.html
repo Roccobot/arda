@@ -104,7 +104,7 @@ html.no-pick body { -webkit-user-select:none; user-select:none; }
 html.no-pick .rank-item { -webkit-user-select:none; user-select:none; }
 html.no-pick input, html.no-pick textarea, html.no-pick select,
 html.no-pick [contenteditable="true"] { -webkit-user-select:text; user-select:text; }
-/* VIGNETTATURA (effetto 'vig' del pannello Feature flag, dalla v12.24): alone
+/* VIGNETTATURA (effetto 'vig' della Console, dalla v12.24): alone
    radiale appena percettibile ai bordi, per dare profondità a un fondo altrimenti
    perfettamente piatto. È un LIVELLO DI SFONDO del body (non un elemento
    sovrapposto): niente nuovi nodi, nessun problema di impilamento, e con
@@ -2871,7 +2871,7 @@ var FEATURES = { genderLegendPill: false, langSwitchMobile: false, oneRing: 'A',
 <body>
 <header>
   <div class="brand-corner">
-    <a class="home-link" href="https://roccobot.me" target="_blank" rel="noopener">roccobot.me</a><span class="version-badge"><span class="vb-v">v</span>15.70</span>
+    <a class="home-link" href="https://roccobot.me" target="_blank" rel="noopener">roccobot.me</a><span class="version-badge"><span class="vb-v">v</span>15.71</span>
   </div>
   <button class="lang-switch" id="lang-switch" aria-label="Switch language"><span class="ls-face">EN</span><span class="ls-measure" aria-hidden="true">EN</span></button>
   <div class="crest" id="crest">Roccobot presenta</div>
@@ -2946,7 +2946,7 @@ if (typeof dati === 'undefined' || !Array.isArray(dati)) {
 // ── Feature flag dell'ASPETTO del sito (dalla v12.24) ────────────────────────
 // Interruttori per gli effetti grafici e per la modalità ingrandita, validi per
 // TUTTI i visitatori. Vivono nei dati (`var siteFlags` in dati.js, scritto dal
-// Worker come cardColors/badgeAdjust) e si governano dal pannello 'Feature flag'
+// Worker come cardColors/badgeAdjust) e si governano dalla Console
 // dell'area admin. Se il dato manca o è malformato si usano i default qui sotto.
 // Ogni flag acceso mette una classe su <html>; tutte le regole CSS degli effetti
 // sono scoped a quella classe, quindi a flag spento l'effetto non esiste.
@@ -3312,8 +3312,10 @@ function applySiteFlags() {
   // Zoom: vince la scelta personale se c'è ('1'/'0' espliciti), altrimenti il
   // sito. ⚠️ Il flag di SITO è DESKTOP/TABLET-only (v12.43, scelta dell'utente):
   // sui telefoni (≤480px) la Modalità XL di sito NON si applica; lì la XL si
-  // ottiene solo con la preferenza personale (tap lungo sul FAB, o un eventuale
-  // tasto Z con tastiera collegata). La preferenza personale vale ovunque.
+  // ottiene solo con la preferenza personale, cioè il tasto Z con una tastiera
+  // collegata: dalla 15.25 il tocco lungo sul FAB apre la ricerca, e sul telefono
+  // la XL non ha più un comando (scelta dell'utente: non serve). La preferenza
+  // personale vale ovunque.
   var mine = LS.getItem(ZOOM_LS_KEY);
   var siteZoom = !!SITE_FLAGS.zoomBig && !ZOOM_PHONE_MQ.matches;
   r.classList.toggle('zoom-big', mine === null ? siteZoom : mine === '1');
@@ -4447,7 +4449,7 @@ document.addEventListener('keydown', function(e) {
   if (typeof reorderMode !== 'undefined' && reorderMode) return;
   // Guardia sui campi: blocca solo dove si SCRIVE (campi di testo, textarea,
   // select, contentEditable). Checkbox, radio, range e bottoni NON bloccano:
-  // dopo un click su una checkbox del pannello Feature flag il focus resta lì,
+  // dopo un click su una checkbox della Console il focus resta lì,
   // e L/T devono continuare a funzionare (regola dell'utente, v12.40).
   var tgt = e.target;
   if (tgt && (tgt.tagName === 'TEXTAREA' || tgt.tagName === 'SELECT' || tgt.isContentEditable)) return;
@@ -6531,7 +6533,7 @@ document.addEventListener('keydown', function(e) {
     // password): Esc = tasto ×, comportamento uniforme. Le modali con handler
     // proprio (viewer immagini, risorse) restano gestite da loro.
     // Sotto-modale di regolazione degli effetti (id proprio 'fx-modal'): sta SOPRA
-    // il pannello Feature flag, quindi va chiusa PRIMA di lui, altrimenti Esc
+    // la Console, quindi va chiusa PRIMA di lui, altrimenti Esc
     // chiuderebbe il pannello sotto lasciandola orfana.
     var fxm = document.getElementById('fx-modal');
     if (fxm) { var fxx = fxm.querySelector('.fab-modal-close'); if (fxx) fxx.click(); return; }
@@ -8179,7 +8181,7 @@ var ZOOM_BIG_FACTOR = 1.3;
 // uniforme, px pinnati inclusi, quindi gli allineamenti restano intatti).
 //
 // DUE LIVELLI, distinti per volontà dell'utente (v12.24):
-//  1) DEFAULT DI SITO: il flag `zoomBig` del pannello 'Feature flag' (admin):
+//  1) DEFAULT DI SITO: il flag `zoomBig` della Console (admin):
 //     vale per TUTTI i visitatori, vive nei dati (siteFlags in dati.js);
 //  2) PREFERENZA PERSONALE: il tasto `Z`, che vale SOLO su questo browser, NON tocca
 //     il sito, e si ricorda in localStorage (chiave arda-zoom-big).
@@ -8193,7 +8195,7 @@ function toggleZoomMode() {
   // Le misure dipendono dalla scala: rifà a-capo 'smart' e linee mediane.
   if (typeof reflowRows === 'function') reflowRows();
   // Testi dei toast riscritti dall'utente (v12.40): 'Modalit\u00E0 XL' come la voce
-  // del pannello Feature flag (era 'Vista ingrandita (solo per te)').
+  // della Console (era 'Vista ingrandita (solo per te)').
   showToast(currentLang === 'it'
     ? (on ? 'Modalit\u00E0 XL' : 'Modalit\u00E0 normale')
     : (on ? 'XL Mode' : 'Standard mode'), false, '\uD83D\uDD0D');
