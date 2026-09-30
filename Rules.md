@@ -54,7 +54,7 @@ misura sola diceva zero mentre l'occhio vedeva muoversi'; qui restano quelle di 
     bocciata per la lentezza. **Vincolo**: il trascinamento costa come la `15.66`, e la misura parte
     **una volta**, a larghezza ferma.
 - **Com'è fatto**: ogni testo che diverge (nome, etichette, pill 'Solo HoME', `.rank-desc`,
-  `.rank-subtitle`, `.rank-title`) porta la `.gemella` dell'altra lingua in `display:none`, quindi
+  `.rank-subtitle`, `.rank-title`) contiene la `.gemella` dell'altra lingua in `display:none`, quindi
   la pagina si dispone come la `15.66`. `misuraCard`, dentro una funzione sincrona, mette
   `.lingua-altra` sulle card e misura anche l'altra lingua; poi:
   1. ogni lingua prende le **sue** decisioni (`name-tight`, a capo bipartito, `apo-wrap`), e quelle
@@ -106,7 +106,7 @@ del testo:
 
 | strumento | per che cosa | perché è sicuro |
 |---|---|---|
-| **`nodo(tag, attributi, ...figli)`** | tutto ciò che porta DATI: la lista, la scheda, l'area admin | una stringa figlia diventa un nodo di testo, per costruzione |
+| **`nodo(tag, attributi, ...figli)`** | tutto ciò che contiene DATI: la lista, la scheda, l'area admin | una stringa figlia diventa un nodo di testo, per costruzione |
 | **`htmlCostante(markup)`** | le COSTANTI del codice: icone di `BADGE_ICON` e `GENDER_ICON`, righe di `i18n`, note, Pannello | è `svgNodo` per l'HTML, e ci passa solo il sorgente |
 | **`nodiRistretti(markup)`** | le due convenzioni di testo del dataset: il vero nome in grassetto, `<br>`/`<em>`/`**` della descrizione | conosce solo quei tre tag e le entità di `escapeHtml`, il resto resta testo |
 
@@ -219,7 +219,7 @@ desktop e mobile, il click porta **dritto all'editor**, chiudendo prima il panne
 icone sono il **glifo del FAB**, estratto dalla pagina e rasterizzato da `scripts/pwaicons.js` coi
 colori del FAB reale.
 
-- ⚠️⚠️ **L'icona è ADATTIVA, quindi NON porta una forma propria** (istruzione dell'utente): un
+- ⚠️⚠️ **L'icona è ADATTIVA, quindi NON ha una forma propria** (istruzione dell'utente): un
   quadrato **pieno** col glifo nella **zona sicura** (l'80% centrale), e la forma la decide il
   launcher. ⚠️ **Scartato lo squircle rasterizzato**: su un launcher che ritaglia in tondo si vede la
   forma **dentro** la forma.
@@ -273,7 +273,7 @@ testa alla pagina. Colore **`#ce9d3b`**.
   viewBox, quindi il margine morto è zero e il glifo è solo scalato a filo del riquadro. La regola
   'icone as-is' resta intatta.
 - **Maschera di contrasto sull'ALFA**, solo per i raster: su un glifo monocromatico è l'alfa a
-  portare la forma (sfocatura 3x3, poi `alfa + 0,35 * (alfa - sfocato)`). L'SVG non la porta,
+  definire la forma (sfocatura 3x3, poi `alfa + 0,35 * (alfa - sfocato)`). L'SVG non applica questa maschera,
   perché il browser lo rasterizza nitido.
 - ⚠️ **`favicon.png` non è stata toccata e resta in cartella**, non referenziata: la copre la regola
   non derogabile sulle immagini esistenti (§ '🧹 Asset del progetto').
@@ -473,7 +473,7 @@ dichiarato perfetto.
   - ⚠️ **La curva si legge dall'ANIMAZIONE**: `getAnimations({subtree:true})` prende anche quella
     dello pseudo-elemento, e portandola a un `currentTime` scelto si legge l'opacità a quell'istante.
 - **Il timeout JS è 2100ms**, subito dopo la fine dell'animazione di 2s. ⚠️ Col **movimento ridotto**
-  l'animazione non gira e il velo resta pieno, perché porta un'informazione (dove si è arrivati): si
+  l'animazione non gira e il velo resta pieno, perché trasmette un'informazione (dove si è arrivati): si
   toglie il movimento, non il segno, e la durata la dà il timeout.
 - ⚠️⚠️ **Nei banchi il fondo si campiona sui PIXEL, non da `getComputedStyle`**, che dà il colore
   dichiarato, mentre il fondo vero della card è un composito di strati: è la stessa trappola del
@@ -913,7 +913,7 @@ normalizzata da **`customPair`**), e il testo della scheda è reso AA da **`ccAa
   **e** nella mini-scheda dell'anteprima.
 - ⚠️ **Nell'editor colori l'anteprima è SOLO DOM: mai toccare `p.cardrgb`.** I salvataggi inviano
   **tutto** (`dati` e colori), quindi un'anteprima non salvata non deve vivere negli oggetti che un
-  altro salvataggio porterebbe con sé. La famiglia che si abbandona torna all'ultimo salvato.
+  altro salvataggio invierebbe. La famiglia che si abbandona torna all'ultimo salvato.
 - ⚠️ **L'editor colori si ricostruisce su `L` ma NON su `T`**: al cambio tema si ricolora da sé e
   l'anteprima mostra già i due temi, mentre un rebuild perderebbe un colore scelto e non salvato. Le
   statistiche si ricostruiscono su tutti e due, conservando tab e scroll.
@@ -1192,7 +1192,7 @@ dataset**.
   - **Regno, con articolo**: titoli di sovrano (`Re/Principe/Signore del Nargothrond`), genitivi
     riferiti al regno (`popolo/tesoro/fedeli del Nargothrond`) e i locativi dello stare o del
     muoversi entro il regno (`nel`, `sul`, `cacciato dal`).
-  - **Città, senza articolo**: raggiungere o portare fisicamente il luogo (`a Nargothrond`), le sue
+  - **Città, senza articolo**: raggiungere fisicamente la città (`a Nargothrond`), le sue
     rovine, e la città come soggetto o oggetto di saccheggio o caduta, con la concordanza al
     **femminile**: `Nargothrond fu saccheggiata`, `Nargothrond cadde`.
   - **In inglese niente articolo**, nei due sensi.
@@ -1509,7 +1509,7 @@ modificatore sono spente in modalità admin.
   stesso RGB del testo con opacità 0,8 (`border: rgba(R,G,B,0.8)`), in **tutte** le etichette e nei
   due temi. Ogni etichetta nuova segue lo stesso schema.
 - **Contrasto**: il colore del testo di un'etichetta nuova si verifica sul suo sfondo, nei due temi.
-- **Niente `/Calaquendë` nelle etichette tipo**: l'informazione 'vide gli Alberi' la porta il
+- **Niente `/Calaquendë` nelle etichette tipo**: l'informazione 'vide gli Alberi' la indica il
   **badge** `calaquende` (§ 'Criteri editoriali dei badge'), e la classe `type-calaquendi` non esiste
   più.
 - **Teleri di Beleriand = etichetta `Sinda`, non `Teler` generico**: i Teleri rimasti nella Terra di
@@ -1525,7 +1525,7 @@ modificatore sono spente in modalità admin.
 ## 🏅 Criteri editoriali dei badge
 
 L'ordine di resa, di legenda e dell'editor vive in **`ICON_ORDER`**; i raggruppamenti di filtro in
-**`BADGE_ROWS`**. Chi porta un badge lo dicono i dati: qui vivono **i criteri e le esclusioni
+**`BADGE_ROWS`**. Chi ha un badge lo dicono i dati: qui vivono **i criteri e le esclusioni
 motivate**, perché nei dati un'esclusione è indistinguibile da una dimenticanza.
 
 ### I criteri
@@ -1541,7 +1541,7 @@ motivate**, perché nei dati un'esclusione è indistinguibile da una dimenticanz
   dell'evento **non si spiega in pagina**.
 - **Helcaraxë**: l'oste di Fingolfin, **Orodreth incluso** perché qui è figlio di Angrod, nato a
   Valinor. ⚠️ **NON** lo attraversarono i **Fëanoriani**, giunti con le navi, né **Finarfin**,
-  tornato a Valinor. **Elenwë** lo porta al 50% con **etichetta dedicata** ('Morì nella traversata
+  tornato a Valinor. **Elenwë** lo ha al 50% con **etichetta dedicata** ('Morì nella traversata
   dell'Helcaraxë'): è l'unica Elfa con nome noto a perire nei ghiacci, e lì il dimezzamento segna la
   **morte durante** la traversata, non un dato presunto.
 - **`incarnazione`** ('Riebbe il corpo dopo le Aule di Mandos'), **solo Elfi**. **Míriel** vi rientra
@@ -1643,7 +1643,7 @@ motivate**, perché nei dati un'esclusione è indistinguibile da una dimenticanz
 `og:image:alt`, che descrive il **disegno**: lasciarlo com'era mentirebbe a chi usa uno screen
 reader.
 
-⚠️⚠️ **L'URL porta un `?v=` da BUMPARE a ogni sostituzione**, in **entrambi** i meta, `og:image` e
+⚠️⚠️ **L'URL contiene un `?v=` da BUMPARE a ogni sostituzione**, in **entrambi** i meta, `og:image` e
 `twitter:image`: la cache dell'anteprima è dei **server dei social**, non del browser, e un file
 sostituito con lo stesso nome mostrerebbe la versione vecchia per giorni, senza modo di svuotarla dal
 lato del sito.
@@ -1800,7 +1800,7 @@ condivisibile una nota nuova basta quel campo.
   editor si proteggono controllando l'id, e i selettori di 'modale aperta' ragionano sugli stessi
   id, quindi un fantasma bloccherebbe una riapertura immediata, e lascerebbe la pagina inerte e i
   tasti nudi zitti per tutta la dissolvenza.
-- ⚠️⚠️ **UN SOLO VELO IN SCENA, E SEMPRE PIENO.** Chi entra porta il velo, istantaneo; chi esce lo
+- ⚠️⚠️ **UN SOLO VELO IN SCENA, E SEMPRE PIENO.** Chi entra mostra il velo, istantaneo; chi esce lo
   **perde** e tiene il solo box, che le passa sopra e dissolve. Tre dettagli indispensabili: **ombra
   spenta** sul box che esce, o il suo alone si somma a quello della modale sotto; **sfocatura
   spenta**, o sfoca il contenuto di chi entra; la classe di uscita si toglie **con l'animazione
