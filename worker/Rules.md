@@ -9,9 +9,9 @@
 > il `worker/CLAUDE.md` del repo `Roccobot/arda` per una di queste sezioni parla di questo file.
 > Qui vive `arda-admin-proxy`; il suo gemello vive in `worker/` del repo
 > `Roccobot/earthsea`, con una copia di questo stesso file: **chi corregge una copia guardi
-> l'altra**. Le regole trasversali vivono nel `CLAUDE.md` di root di
+> l'altra**. Le regole trasversali vivono nel `Rules.md` dell'hub
 > `Roccobot/roccobot.github.io`, e il formato dei dati che il Worker di Arda scrive nel
-> `CLAUDE.md` del repo `Roccobot/arda`, sezione '🗃️ Struttura dati'.
+> `Rules.md` del repo `Roccobot/arda`, sezione '🗃️ Struttura dati'.
 > ⚠️ **Dal 2026-09-26 ogni Worker vive nel repo del suo sito** (Arda dal `rev` 18, Terramare
 > dal `rev` 4): prima erano in `proxy/` e `proxy/earthsea/` del repo `Roccobot/roccobot.github.io`.
 
