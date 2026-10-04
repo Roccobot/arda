@@ -129,6 +129,10 @@ misura sola diceva zero mentre l'occhio vedeva muoversi'; qui restano quelle di 
   - ⚠️ **`reflowRows()` non è più sincrona sulle card fuori vista**: un banco che misura subito
     dopo vede assestate le sole card in vista, e aspetta (il banco di certificazione aspetta 1,2 s
     per larghezza). L'animazione di comparsa è delle sole dodici card del primo lotto (`.rk-in`).
+  - ⚠️ **L'osservatore della lista legge la larghezza con `clientWidth`, la stessa misura della
+    chiave** (`chiaveReflow`): fino alla `15.71` all'avvio leggeva il bordo esterno e nella notifica
+    il solo contenuto, senza padding, quindi la prima notifica chiamava il timer per niente. Qui la
+    chiave lo fermava; su Terramare, dove il timer non la guardava, rifaceva la misura intera.
   - Il perché per esteso, e le misure di partenza, vivono in `earthsea/Rules.md` § 'La misura gira A
     LOTTI, e le card in vista vengono prima': il meccanismo è lo stesso sui due siti.
 - **Costo dichiarato e accettato**: la misura completa dopo un ridimensionamento costa circa due

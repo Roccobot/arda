@@ -6357,10 +6357,15 @@ var _roW = 0;
 (function(){
   var lista = document.getElementById('rank-list');
   if (!lista || !window.ResizeObserver) return;
-  _roW = Math.round(lista.getBoundingClientRect().width);
+  // ⚠️ La larghezza si legge SEMPRE con `clientWidth`, che è anche la misura della chiave
+  // (`chiaveReflow`). Fino alla 15.71 l'avvio leggeva il bordo esterno e la notifica il solo
+  // contenuto (`contentRect`, senza padding): la prima notifica, che arriva sempre, vedeva una
+  // lista più stretta e chiamava il timer per niente. Qui la chiave lo fermava; su Terramare,
+  // dove il timer non la guardava, rifaceva l'intera misura all'avvio.
+  _roW = lista.clientWidth;
   try {
-    new ResizeObserver(function(voci){
-      var w = Math.round(voci[0].contentRect.width);
+    new ResizeObserver(function(){
+      var w = lista.clientWidth;
       if (w === _roW) return;
       _roW = w;
       pianificaReflow();
