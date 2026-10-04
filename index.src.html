@@ -37,6 +37,9 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=3">
 <!-- App installabile (PWA): nome 'Arda Roccobot', icone col simbolo del FAB.
      apple-touch-icon serve a iOS, che il manifest non lo guarda per l'icona. -->
+<!-- Dati strutturati per motori e agenti: il sito descritto come Dataset, col file dei dati
+     (`dati.js`) come distribuzione. Statici: l'elenco delle voci vive nel `<noscript data-elenco>`. -->
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "I Grandi di Arda", "alternateName": "The Great Ones of Arda", "description": "Classifica bilingue (italiano e inglese) degli esseri più potenti del mondo di J.R.R. Tolkien, dall'Ainulindalë alla Terza Era, con fonti, genealogie, titoli e citazioni. The mightiest beings in Tolkien's world, ranked, in Italian and English.", "url": "https://roccobot.github.io/arda/", "inLanguage": ["it", "en"], "isAccessibleForFree": true, "creator": {"@type": "Person", "name": "Rocco Casadei", "alternateName": "Roccobot", "url": "https://roccobot.me"}, "distribution": {"@type": "DataDownload", "contentUrl": "https://roccobot.github.io/arda/dati.js", "encodingFormat": "text/javascript"}}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="pwa/app-192.png">
 <meta name="apple-mobile-web-app-title" content="Arda Roccobot">
@@ -361,6 +364,13 @@ html[data-theme="dark"] .version-badge, html[data-theme="dark"] .home-link { col
 html[data-theme="dark"] .lang-switch, html[data-theme="dark"] .lang-switch > .ls-face { color:#bdbdbd; }
 
 .scroll { max-width:920px; margin:1.2rem auto 3rem; padding:0 1rem; }
+/* L'elenco per chi legge SENZA JavaScript (`<noscript data-elenco>`, lo riempie il minificatore):
+   la stessa colonna della lista e i colori del tema, perché senza stile i link restavano blu
+   sul fondo scuro e la classifica perdeva i numeri. Con JavaScript acceso non si vede mai. */
+.elenco-statico { max-width:920px; margin:1.2rem auto 3rem; padding:0 1rem; color:var(--parchment); line-height:1.5; }
+.elenco-statico a { color:var(--gold-bright); }
+.elenco-statico ol { list-style:decimal; padding-left:2.4em; margin:0.8rem 0; }
+.elenco-statico h2 { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--gold-bright); margin:2rem 0 0.6rem; }
 
 .rank-item {
   position:relative;
@@ -2896,7 +2906,7 @@ var FEATURES = { genderLegendPill: false, langSwitchMobile: false, oneRing: 'A',
 <body>
 <header>
   <div class="brand-corner">
-    <a class="home-link" href="https://roccobot.me" target="_blank" rel="noopener">roccobot.me</a><span class="version-badge"><span class="vb-v">v</span>15.73</span>
+    <a class="home-link" href="https://roccobot.me" target="_blank" rel="noopener">roccobot.me</a><span class="version-badge"><span class="vb-v">v</span>15.74</span>
   </div>
   <button class="lang-switch" id="lang-switch" aria-label="Switch language"><span class="ls-face">EN</span><span class="ls-measure" aria-hidden="true">EN</span></button>
   <div class="crest" id="crest">Roccobot presenta</div>
@@ -2914,6 +2924,10 @@ var FEATURES = { genderLegendPill: false, langSwitchMobile: false, oneRing: 'A',
 </header>
 
 <main class="scroll" id="rank-list"></main>
+<!-- L'elenco per chi legge senza JavaScript: il minificatore ci aggiunge le voci di `dati.js`
+     (`elencoStatico` in .github/scripts/minify.mjs). Sta FUORI da #rank-list, o la regola
+     `#rank-list:empty ~ footer` non nasconderebbe più il footer prima delle card. -->
+<noscript data-elenco data-titolo-apocrifi="Solo HoME"><p>Senza JavaScript resta l'elenco essenziale, nell'ordine della classifica. I dati completi, in italiano e in inglese, sono in <a href="dati.js">dati.js</a>, e <a href="llms.txt">llms.txt</a> ne spiega i campi.</p></noscript>
 <div class="print-running-header" aria-hidden="true"><span>I Grandi di Arda</span><span>roccobot.me</span></div>
 
 <footer>

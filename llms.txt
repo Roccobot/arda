@@ -1,0 +1,27 @@
+# The Great Ones of Arda (I Grandi di Arda)
+
+> A bilingual (Italian and English) ranking of the mightiest beings in J.R.R. Tolkien's legendarium, from the Ainulindalë to the Third Age, with sources, genealogies, titles and quotations. Made by Rocco Casadei (Roccobot).
+
+The page builds its cards with JavaScript. Without it, the page still contains the ranked list of names, types and first-appearance works in a `<noscript>` block. The complete data is in one file.
+
+## Data
+
+- [dati.js](https://roccobot.github.io/arda/dati.js): the whole dataset. A JavaScript file: `var datiVersion` is the site version, and `var dati = [ ... ]` holds one JSON object per line, in ranking order (the first entry is ranked first).
+
+Main fields of each entry (an `_en` suffix is the English version of the same field):
+
+- `nome`, `nome_en`: the name shown on the card.
+- `tipo`, `tipo_en`: the race or kind (several values are separated by `|`).
+- `info`, `info_en`: a one-line description.
+- `descrizione`, `descrizione_en`: the full description.
+- `nomi_alternativi`, `appellativi` (and `_en`): other names, and titles.
+- `padre`, `madre`: parents.
+- `genere`: `m` or `f`, or `n` for creatures of unknown nature.
+- `fonte`, `fonte_en`: the work where the character first appears.
+- `citazione`, `citazione_en`: a quotation.
+- `apocrifo`: `true` for characters attested only in drafts (The History of Middle-earth); the page lists them apart, as 'HoME-only'.
+- Other boolean keys (such as `silmaril`, `onering`, `balrog`) are badges; the page legend explains each one.
+
+## Page
+
+- [I Grandi di Arda](https://roccobot.github.io/arda/): the ranking, with filters by category and badge, in Italian or English.
