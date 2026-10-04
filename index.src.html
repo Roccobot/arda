@@ -58,6 +58,10 @@
 @font-face{font-family:'EB Garamond';font-style:italic;font-weight:400 800;font-display:swap;src:url(fonts/EBGaramond-400-800-italic-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
 @font-face{font-family:'EB Garamond';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/EBGaramond-400-800-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
 @font-face{font-family:'EB Garamond';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/EBGaramond-400-800-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'EBG Ripiego T';font-style:normal;src:local('Times New Roman'),local('TimesNewRomanPSMT'),local('Times'),local('Times-Roman'),local('Liberation Serif'),local('LiberationSerif');size-adjust:94%;ascent-override:107.1%;descent-override:31.7%;line-gap-override:0%;}
+@font-face{font-family:'EBG Ripiego T';font-style:italic;src:local('Times New Roman Italic'),local('TimesNewRomanPS-ItalicMT'),local('Times-Italic'),local('Liberation Serif Italic'),local('LiberationSerif-Italic');size-adjust:90.8%;ascent-override:110.9%;descent-override:32.8%;line-gap-override:0%;}
+@font-face{font-family:'EBG Ripiego N';font-style:normal;src:local('Noto Serif'),local('NotoSerif'),local('NotoSerif-Regular');size-adjust:79.9%;ascent-override:126%;descent-override:37.3%;line-gap-override:0%;}
+@font-face{font-family:'EBG Ripiego N';font-style:italic;src:local('Noto Serif Italic'),local('NotoSerif-Italic');size-adjust:80.1%;ascent-override:125.7%;descent-override:37.2%;line-gap-override:0%;}
 </style>
 <style>
 :root {
@@ -142,7 +146,7 @@ body {
      ancorato al viewport durante lo scorrimento. Le card, che hanno un fondo
      proprio, ci restano sopra naturalmente. */
   color: var(--parchment);
-  font-family: 'EB Garamond', Georgia, serif;
+  font-family: 'EB Garamond','EBG Ripiego T','EBG Ripiego N', Georgia, serif;
   font-size: 17px;
   line-height: 1.6;
   min-height: 100vh;
@@ -323,7 +327,7 @@ h1 {
 #title.ti-rotto .ti-b { display:block; }
 
 .subtitle {
-  font-family:'EB Garamond',serif; font-style:italic;
+  font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; font-style:italic;
   font-size:clamp(1rem,2.5vw,1.3rem); color:var(--parchment-dim);
   max-width:640px; margin:0 auto 0.8rem; line-height:1.5;
   /* Bilancia le due righe così l'ultima parola non resta orfana su una riga
@@ -371,6 +375,20 @@ html[data-theme="dark"] .lang-switch, html[data-theme="dark"] .lang-switch > .ls
 .elenco-statico a { color:var(--gold-bright); }
 .elenco-statico ol { list-style:decimal; padding-left:2.4em; margin:0.8rem 0; }
 .elenco-statico h2 { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--gold-bright); margin:2rem 0 0.6rem; }
+/* La sentinella del disegno a tratti (vedi `armaSentinella`): alta zero, quindi non sposta niente. */
+.rank-tratto { height:0; pointer-events:none; }
+/* L'indicatore d'attesa del disegno completo (vedi `disegnaTutto`): un anello nei colori dei dischi
+   del FAB, al centro dello schermo. Gira con una `transform`, che il compositore anima anche
+   mentre il disegno tiene occupato il filo principale. */
+.attesa-disegno { position:fixed; left:50%; top:50%; z-index:620; width:3rem; height:3rem; margin:-1.5rem 0 0 -1.5rem;
+  border-radius:50%; border:0.28rem solid rgba(210,178,92,0.25); border-top-color:#d2b25c;
+  opacity:0; visibility:hidden; pointer-events:none; transition:opacity .15s, visibility 0s .15s;
+  animation:attesa-gira .75s linear infinite; }
+.attesa-disegno.on { opacity:1; visibility:visible; transition:opacity .15s; }
+.attesa-disegno span { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+html[data-theme="light"] .attesa-disegno { border-color:rgba(31,85,98,0.22); border-top-color:#1f5562; }
+@keyframes attesa-gira { to { transform:rotate(360deg); } }
+@media (prefers-reduced-motion:reduce) { .attesa-disegno { animation-duration:2.4s; } }
 
 .rank-item {
   position:relative;
@@ -489,14 +507,14 @@ html[data-theme="dark"] .lang-switch, html[data-theme="dark"] .lang-switch > .ls
 .rank-name.name-tight { letter-spacing:0.006em; gap:0.24em; }
 
 .rank-title {
-  font-family:'EB Garamond',serif; font-style:italic;
+  font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; font-style:italic;
   font-size:clamp(0.82rem,2.1vw,0.98rem);
   color:var(--parchment-dim); letter-spacing:0.01em;
   display:flex; align-items:center; gap:0.4em; flex-wrap:wrap;
 }
 
 .rank-subtitle {
-  font-family:'EB Garamond',serif;
+  font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif;
   font-size:clamp(0.88rem,2.1vw,1.03rem);
   color:var(--parchment-dim);
   opacity:0.75;
@@ -521,7 +539,7 @@ html[data-theme="dark"] .lang-switch, html[data-theme="dark"] .lang-switch > .ls
 .rank-subtitle .bp-b, .rank-subtitle .bp-solo, .rank-desc .bp-b { font-style:italic; color:var(--parchment-dim); color:color-mix(in srgb, var(--parchment-dim) 64%, var(--gold) 36%); }
 
 .rank-desc {
-  font-family:'EB Garamond',serif;
+  font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif;
   font-size:clamp(0.73rem,1.7vw,0.86rem);
   color:var(--parchment-dim);
   /* 0.80 (era 0.72, dalla v12.24): è la riga più piccola e tenue della card
@@ -624,7 +642,7 @@ html[data-theme="dark"] .rank-subtitle .bp-solo { color:#c0c0c0; }
 
 .type-badge {
   display:inline-flex; align-items:center; gap:0;
-  font-family:'EB Garamond',serif; font-size:0.72em; font-style:normal; font-weight:normal;
+  font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; font-size:0.72em; font-style:normal; font-weight:normal;
   border-radius:3px; padding:1px 6px;
   vertical-align:middle; white-space:nowrap; letter-spacing:0.03em;
 }
@@ -1280,7 +1298,7 @@ html[data-theme="light"] .ctrl-apo.on .apo-sw::after { background:#fff; }
 .ctrl-left { display:contents; }
 .ctrl-names-note {
   display:none; font-style:italic;
-  font-family:'EB Garamond',serif; font-size:0.84rem; line-height:1.45;
+  font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; font-size:0.84rem; line-height:1.45;
   color:var(--parchment-dim); padding:0 0.3rem; max-width:17rem;
 }
 .ctrl-names-note strong { font-weight:800; color:var(--parchment); }
@@ -1411,7 +1429,7 @@ html[data-theme="light"] .ctrl-legend-row.on { background:rgba(58,88,120,0.12); 
 /* × in EB Garamond, più grande del testo: line-height azzerata (il glifo siede
    alto sulla baseline). La centratura verticale fine è affidata al transform
    per-elemento sopra (.tag-x translateY), non più a un top negativo. */
-.ctrl-badge-tag .tag-x { font-size:1.05rem; line-height:0; font-family:'EB Garamond',serif; display:inline-flex; align-items:center; }
+.ctrl-badge-tag .tag-x { font-size:1.05rem; line-height:0; font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; display:inline-flex; align-items:center; }
 html[data-theme="light"] .ctrl-badge-tag { border-color:rgba(58,88,120,0.6); background:rgba(58,88,120,0.10); color:#2a4a68; }
 html[data-theme="light"] .ctrl-badge-tag:hover { background:rgba(58,88,120,0.18); }
 .ctrl-legend-row span { white-space:nowrap; }
@@ -1646,7 +1664,7 @@ html[data-theme="light"] .ctrl-scroll-hint .csh-tail { background:rgba(31,85,98,
   #ctrl-panel .ctrl-section--filtri { width:0; min-width:100%; box-sizing:border-box; padding-right:0.24rem; }
   /* nota nomi: in fondo, su una sola riga, allineata a sinistra come le sezioni */
   .ctrl-mobile-note {
-    display:block; white-space:nowrap; font-family:'EB Garamond',serif;
+    display:block; white-space:nowrap; font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif;
     font-style:italic; font-size:0.8rem; color:var(--parchment-dim);
     padding:0 0.3rem; margin-top:0.5rem;
   }
@@ -1932,7 +1950,7 @@ html[data-theme="light"] .ctrl-scroll-hint .csh-tail { background:rgba(31,85,98,
 .modal-tg img { width:1.5em; height:1.5em; display:block; }
 
 .modal-source {
-  font-family:'EB Garamond',serif; font-style:italic;
+  font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; font-style:italic;
   font-size:clamp(1rem,2.5vw,1.15rem); color:var(--gold-bright);
   margin-bottom:1.5rem; border-bottom:1px solid rgba(104,144,168,0.3); padding-bottom:1rem;
   display: flex;
@@ -1949,10 +1967,10 @@ html[data-theme="light"] .ctrl-scroll-hint .csh-tail { background:rgba(31,85,98,
 
 .modal-section { margin-bottom:1.4rem; }
 
-.modal-section p { font-family:'EB Garamond',serif; font-size:1.02rem; line-height:1.7; color:var(--parchment); }
+.modal-section p { font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; font-size:1.02rem; line-height:1.7; color:var(--parchment); }
 
 .modal-quote {
-  font-family:'EB Garamond',serif; font-style:italic;
+  font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; font-style:italic;
   font-size:1rem; color:var(--parchment-dim);
   padding:1rem 1.4rem; border-left:2px solid var(--gold);
   margin-top:1.2rem; background:rgba(255,255,255,0.05);
@@ -2073,7 +2091,7 @@ html[data-theme="light"] .fab-modal-confirm.is-primary:hover { background:#3369a
 html[data-theme="light"] .fab-modal-confirm.is-pending { background:rgba(190,140,30,0.14);border-color:#b8860b;color:#8a6508; }
 html[data-theme="light"] .fab-modal-confirm.is-pending:hover { background:rgba(190,140,30,0.24);border-color:#9a6f08; }
 .fab-modal-confirm .fmc-main { display:block; }
-.fab-modal-confirm .fmc-sub { display:block;font-family:'EB Garamond',serif;font-weight:normal;font-size:0.64rem;letter-spacing:0.01em;text-transform:none;opacity:0.72;margin-top:0.15rem;line-height:1.2; }
+.fab-modal-confirm .fmc-sub { display:block;font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif;font-weight:normal;font-size:0.64rem;letter-spacing:0.01em;text-transform:none;opacity:0.72;margin-top:0.15rem;line-height:1.2; }
 /* Modale di conferma scarto riordino: domanda centrata, pulsanti a due righe
    più alti, No/Si in evidenza (grassetto, corpo maggiore) e sotto-riga tra
    parentesi più piccola (eredita .fmc-sub). Scoped: non tocca le altre modali. */
@@ -2194,7 +2212,7 @@ html.admin-open body > *:not(.admin-overlay):not(.fab-modal-overlay):not(#arda-t
   .admin-flags-row { display:grid;grid-template-columns:repeat(12,1fr);gap:0.6rem 0.3rem;justify-items:start; }
   .admin-apo-chk { grid-column:11 / 13;margin-top:0;flex-basis:auto;justify-content:start; }
 }
-.admin-input,.admin-textarea { background:var(--ink-deep);border:1px solid var(--gold-deep);border-radius:4px;color:var(--parchment);font-family:'EB Garamond',serif;font-size:1rem;padding:0.45rem 0.6rem;outline:none;box-sizing:border-box;width:100%;transition:border-color 0.15s;-webkit-appearance:none;appearance:none; }
+.admin-input,.admin-textarea { background:var(--ink-deep);border:1px solid var(--gold-deep);border-radius:4px;color:var(--parchment);font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif;font-size:1rem;padding:0.45rem 0.6rem;outline:none;box-sizing:border-box;width:100%;transition:border-color 0.15s;-webkit-appearance:none;appearance:none; }
 .admin-input:focus,.admin-textarea:focus { border-color:var(--gold-bright); }
 .admin-textarea { resize:vertical;min-height:5rem; }
 /* Campo modificato nella sessione corrente: bordo/anello arancio ben visibile
@@ -2295,7 +2313,7 @@ html[data-theme="light"] .admin-field.admin-modified .admin-label { color:#c75b1
 .admin-search-box { position:relative;z-index:1;width:min(620px,92vw);display:flex;flex-direction:column;background:var(--ink);border:1px solid var(--gold-deep);border-radius:12px;box-shadow:0 18px 60px rgba(0,0,0,0.55);overflow:hidden; }
 .admin-search-top { display:flex;align-items:center;gap:0.55rem;padding:0.7rem 0.95rem;border-bottom:1px solid rgba(104,144,168,0.18); }
 .admin-search-ic { opacity:0.7;font-size:0.95rem; }
-.admin-search-input { flex:1;background:none;border:none;outline:none;color:var(--parchment);font-family:'EB Garamond',serif;font-size:1.15rem;min-width:0; }
+.admin-search-input { flex:1;background:none;border:none;outline:none;color:var(--parchment);font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif;font-size:1.15rem;min-width:0; }
 .admin-search-count { font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.06em;color:var(--parchment-dim);white-space:nowrap; }
 .admin-search-results { max-height:52vh;overflow-y:auto; }
 .admin-search-empty { padding:0.9rem;text-align:center;color:var(--parchment-dim);font-size:0.9rem; }
@@ -2727,7 +2745,7 @@ html[data-theme="light"] .note-charlink { color:var(--nl-l,var(--gold-bright)); 
    come sempre `focus-visible`, quindi l'anello comparirebbe anche aprendo col dito.
    ⚠️ NON vale per i RISULTATI: là il fondo è l'unico indicatore che dice su quale
    riga si è arrivati col Tab. */
-.ss-input { width:100%; box-sizing:border-box; font-family:'EB Garamond',serif; font-size:1.1rem;
+.ss-input { width:100%; box-sizing:border-box; font-family:'EB Garamond','EBG Ripiego T','EBG Ripiego N',serif; font-size:1.1rem;
   padding:.55rem .75rem; border-radius:8px; border:1px solid rgba(180,180,180,0.3);
   background:rgba(0,0,0,0.16); color:inherit; outline:none; }
 /* La × sparisce dove il tocco basta a chiudere: la classe la mette `openSiteSearch`,
@@ -2906,7 +2924,7 @@ var FEATURES = { genderLegendPill: false, langSwitchMobile: false, oneRing: 'A',
 <body>
 <header>
   <div class="brand-corner">
-    <a class="home-link" href="https://roccobot.me" target="_blank" rel="noopener">roccobot.me</a><span class="version-badge"><span class="vb-v">v</span>15.75</span>
+    <a class="home-link" href="https://roccobot.me" target="_blank" rel="noopener">roccobot.me</a><span class="version-badge"><span class="vb-v">v</span>15.85</span>
   </div>
   <button class="lang-switch" id="lang-switch" aria-label="Switch language"><span class="ls-face">EN</span><span class="ls-measure" aria-hidden="true">EN</span></button>
   <div class="crest" id="crest">Roccobot presenta</div>
@@ -4466,7 +4484,7 @@ document.addEventListener('keydown', function(e) {
   if (tgt && (tgt.tagName === 'INPUT' || tgt.tagName === 'TEXTAREA' || tgt.isContentEditable)) return;
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
     e.preventDefault();
-    pageScrollTo(e.key === 'ArrowUp' ? 0 : sEl().scrollHeight, false);
+    if (e.key === 'ArrowUp') pageScrollTo(0, false); else vaiInFondo(false);
   }
 });
 // Scorciatoie a tasto NUDO (stile YouTube): P apre/chiude il Pannello (come un
@@ -5618,17 +5636,149 @@ function dimensioniIcone(radice) {
     if (d) { imgs[i].setAttribute('width', d[0]); imgs[i].setAttribute('height', d[1]); }
   }
 }
+// ── Il disegno A TRATTI: le card nascono mentre si scorre (15.85) ─────────────────────────
+// ⚠️⚠️ L'ANTI-JITTER È UNA CONTROMISURA VISIVA, e misurarlo su card che nessuno vede costava
+// quasi tutto il tempo di blocco della pagina (proposta dell'utente, 2026-10-04: *non ha senso
+// applicarla a ciò che non si vede*). Quindi `renderList` disegna le prime `LOTTO_PRIMO` card, e una
+// sentinella invisibile in coda alla lista ne aggiunge un tratto di altrettante quando arriva a
+// una schermata e mezza dal fondo: ogni tratto si misura da solo (`misuraCard`), perché le card
+// dipendono dalla sola larghezza della lista e non l'una dall'altra (vedi `inLotti`).
+// ⚠️ Quello che vuole la lista INTERA la disegna tutta, con `disegnaTutto`: il salto in fondo
+// (con l'indicatore d'attesa, condizione dell'utente), `Cmd`/`Ctrl`+`F` (la ricerca del browser
+// vede solo quello che c'è), il parametro `?d=full`, il riordino e l'area admin.
+// ⚠️ Un ridisegno (cambio lingua, filtri) rifà almeno le card che c'erano: il cambio lingua a
+// metà pagina non deve accorciarla sotto il dito, e la fotografia di `setLang` copre le stesse card.
+// ⚠️ È lo stesso nucleo di 'I Grandi di Terramare' (regola dell'utente: il funzionamento dei siti
+// gemelli è lo stesso), e le due copie si cambiano insieme.
+var _tr = null, _ioTratti = null;
+var _disegnoPieno = /(?:^|[?&])d=full(?:&|$)/.test(location.search);
+function tuttoDaDisegnare() {
+  return _disegnoPieno || reorderMode || document.documentElement.classList.contains('admin-open');
+}
+function emettiFino(dest, n) {
+  var fine = Math.min(n, _tr.ordine.length);
+  while (_tr.k < fine) emettiCarta(dest);
+}
+function armaSentinella(list) {
+  if (_ioTratti) { _ioTratti.disconnect(); _ioTratti = null; }
+  if (!_tr || _tr.k >= _tr.ordine.length) return;
+  var s = nodo('div', { 'class': 'rank-tratto', 'aria-hidden': 'true' });
+  list.appendChild(s);
+  // ⚠️ Senza `IntersectionObserver` niente tratti: la lista si disegna intera, come prima.
+  if (!window.IntersectionObserver) { aggiungiTratto(_tr.ordine.length); return; }
+  _ioTratti = new IntersectionObserver(function(voci){
+    for (var i = 0; i < voci.length; i++) if (voci[i].isIntersecting) { aggiungiTratto(_tr.k + LOTTO_PRIMO); return; }
+  }, { rootMargin: '0px 0px 150% 0px' });
+  _ioTratti.observe(s);
+}
+// Le card fino alla `n`-esima dell'ordine, in coda alla lista e misurate. ⚠️⚠️ L'osservatore
+// non richiama da solo se la sentinella, spostata in giù, è ancora vicina allo schermo (lo stato
+// 'visibile' non è cambiato): si stacca e si riattacca, e la prima notifica dice com'è adesso.
+// ⚠️ Le dimensioni delle icone si scrivono PRIMA di inserire il tratto (`dimensioniIcone`), o la
+// sua misura vede le icone larghe zero.
+function aggiungiTratto(n) {
+  var list = document.getElementById('rank-list'), s = list.querySelector('.rank-tratto');
+  if (!_tr || !s || _tr.k >= _tr.ordine.length) return [];
+  var frag = document.createDocumentFragment(), nuove = [], i;
+  emettiFino(frag, n);
+  for (i = 0; i < frag.childNodes.length; i++) if (frag.childNodes[i].classList.contains('rank-item')) nuove.push(frag.childNodes[i]);
+  dimensioniIcone(frag);
+  list.insertBefore(frag, s);
+  if (_tr.k >= _tr.ordine.length) {
+    if (_ioTratti) { _ioTratti.disconnect(); _ioTratti = null; }
+    s.remove();
+  } else if (_ioTratti) { _ioTratti.unobserve(s); _ioTratti.observe(s); }
+  if (nuove.length) {
+    misuraCard(nuove);
+    if (midlinesOn) placeCardMidlines();
+  }
+  return nuove;
+}
+// La card della voce `idx` del dataset, disegnando quello che manca fino a lei e un tratto dopo,
+// così arriva al centro dello schermo con qualcosa sotto (la ricerca del sito).
+function disegnaFinoA(idx) {
+  if (!_tr) return;
+  var pos = _tr.ordine.indexOf(idx);
+  if (pos >= _tr.k) aggiungiTratto(pos + 1 + LOTTO_PRIMO);
+}
+// ⚠️ L'indicatore d'attesa gira sul compositore (una `transform` animata), quindi continua a
+// girare anche mentre il disegno blocca il filo principale. Si mostra per almeno un attimo: un
+// lampo più breve si legge come un difetto, non come un'attesa.
+var ATTESA_MIN_MS = 300;
+function disegnaTutto(poi) {
+  _disegnoPieno = true;
+  if (!_tr || _tr.k >= _tr.ordine.length) { if (poi) poi(); return; }
+  var a = document.getElementById('attesa-disegno');
+  if (!a) {
+    a = nodo('div', { id: 'attesa-disegno', 'class': 'attesa-disegno', role: 'status' }, nodo('span', null, ''));
+    document.body.appendChild(a);
+  }
+  a.firstChild.textContent = currentLang === 'it' ? 'Caricamento di tutti i personaggi' : 'Loading all characters';
+  a.classList.add('on');
+  var t0 = Date.now();
+  // Due fotogrammi: il primo mette in scena l'indicatore, il secondo lo dipinge davvero.
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    aggiungiTratto(_tr.ordine.length);
+    setTimeout(function(){
+      a.classList.remove('on');
+      if (poi) poi();
+    }, Math.max(0, ATTESA_MIN_MS - (Date.now() - t0)));
+  }); });
+}
+function vaiInFondo(fluido) {
+  disegnaTutto(function(){ pageScrollTo(sEl().scrollHeight, fluido); });
+}
+// ⚠️ `Cmd`/`Ctrl`+`F` disegna tutto SENZA fermare il browser: la sua barra di ricerca si apre
+// come sempre, e trova anche le card che arrivano subito dopo.
+document.addEventListener('keydown', function(e) {
+  if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
+  if (e.key === 'f' || e.key === 'F') disegnaTutto();
+});
 // ⚠️ `foto` arriva SOLO da `setLang` (vedi `fotografaRighe`): le altre chiamate non la passano,
 // e un argomento che non è una fotografia valida (un evento, per esempio) la fa scartare.
 function renderList(foto) {
   var list = document.getElementById('rank-list');
   var carte = document.createDocumentFragment();
-  var visN = 0;
-  for (var i = 0; i < dati.length; i++) {
+  // Quante card c'erano prima: un ridisegno (cambio lingua, filtri) ne rifà almeno altrettante,
+  // così chi ha già scorso non si ritrova la pagina accorciata sotto il dito.
+  var giaDisegnate = list.querySelectorAll('.rank-item').length;
+  var ordine = [];
+  for (var i = 0; i < dati.length; i++) if (isVisibile(dati[i], i)) ordine.push(i);
+  _tr = { ordine: ordine, k: 0, visN: 0 };
+  emettiFino(carte, tuttoDaDisegnare() ? ordine.length : Math.max(LOTTO_PRIMO, giaDisegnate));
+  // Incrocio categorie × badge senza risultati: messaggio al posto del vuoto.
+  if (!ordine.length) {
+    carte = nodo('p', { 'class': 'rank-empty' }, currentLang === 'it'
+      ? 'Nessun personaggio corrisponde ai filtri attivi.'
+      : 'No character matches the active filters.');
+  }
+  if (isFirstRender) {
+    list.classList.add('list-animate');
+    isFirstRender = false;
+    // Rete di sicurezza: su alcuni motori (Safari iOS) le animazioni fuori schermo
+    // vengono sospese e gli item resterebbero a opacity:0. Dopo che la stagger è
+    // conclusa, rimuoviamo la classe così nessun item può restare invisibile.
+    setTimeout(function(){ list.classList.remove('list-animate'); }, 1600);
+  } else {
+    list.classList.remove('list-animate');
+  }
+  list.replaceChildren(carte);
+  dimensioniIcone(list);
+  armaSentinella(list);
+  if (applicaFoto(foto)) {
+    riservaTesta(); if (midlinesOn) placeCardMidlines();
+    _reflowChiave = chiaveReflow();
+    verificaInOzio();
+  } else reflowRows();
+}
+// Una card della lista, la `k`-esima dell'ordine in `_tr`, in coda a `carte`, coi gestori del
+// nome già attaccati. Il numero in classifica vive in `_tr`, così il disegno può fermarsi e
+// riprendere un tratto dopo (vedi `emettiFino`).
+function emettiCarta(carte) {
+    var i = _tr.ordine[_tr.k++];
     var p = dati[i];
-    if (!isVisibile(p, i)) continue;
     var cat = categoria(p);
-    visN++;
+    var visN = ++_tr.visN;
     var isVisTop = visN <= 3;
     var nome = nomeDi(p, currentLang === 'it');
     var nomeAltro = nomeDi(p, currentLang !== 'it');
@@ -5741,7 +5891,7 @@ function renderList(foto) {
     // che il visitatore vede arrivare, e il ritardo a scalare era già saturo a dodici.
     var conReveal = visN <= LOTTO_PRIMO;
     var stileCard = (conReveal ? 'animation-delay:' + (Math.min(visN, 12) * 0.04) + 's' : '') + ccInline;
-    carte.appendChild(nodo('div', { 'class': classes + (conReveal ? ' rk-in' : ''), style: stileCard || null, 'data-idx': i },
+    var card = nodo('div', { 'class': classes + (conReveal ? ' rk-in' : ''), style: stileCard || null, 'data-idx': i },
       // Bordino sinistro: striscia in sovrapposizione (assoluta, nessun impatto
       // sul layout), colore dal contorno dell'etichetta tipo (2a se più d'una).
       // Spessore 4px normali / 8px podio via CSS (.vis-top .rank-strip).
@@ -5753,45 +5903,15 @@ function renderList(foto) {
           nodo('span', { 'class': 'rank-tipi' }, tipi)),
         rigaDesc,
         riga2,
-        bilingue('rank-title', function(it){ return operaDi(p, it); }, function(it){ return operaDi(p, it); }, true))));
-  }
-  // Incrocio categorie × badge senza risultati: messaggio al posto del vuoto.
-  if (visN === 0) {
-    carte = nodo('p', { 'class': 'rank-empty' }, currentLang === 'it'
-      ? 'Nessun personaggio corrisponde ai filtri attivi.'
-      : 'No character matches the active filters.');
-  }
-  if (isFirstRender) {
-    list.classList.add('list-animate');
-    isFirstRender = false;
-    // Rete di sicurezza: su alcuni motori (Safari iOS) le animazioni fuori schermo
-    // vengono sospese e gli item resterebbero a opacity:0. Dopo che la stagger è
-    // conclusa, rimuoviamo la classe così nessun item può restare invisibile.
-    setTimeout(function(){ list.classList.remove('list-animate'); }, 1600);
-  } else {
-    list.classList.remove('list-animate');
-  }
-  list.replaceChildren(carte);
-  dimensioniIcone(list);
-
-  var items = list.querySelectorAll('.rank-item');
-  for (var j = 0; j < items.length; j++) {
-    (function(el) {
-      var dataIdx = parseInt(el.getAttribute('data-idx'));
-      var nameEl = el.querySelector('.rank-name-text');
-      if (nameEl) {
-        nameEl.addEventListener('click', function(e) { e.stopPropagation(); modalReturn = null; openModal(dataIdx); });
-        nameEl.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); modalReturn = null; openModal(dataIdx); }
-        });
-      }
-    })(items[j]);
-  }
-  if (applicaFoto(foto)) {
-    riservaTesta(); if (midlinesOn) placeCardMidlines();
-    _reflowChiave = chiaveReflow();
-    verificaInOzio();
-  } else reflowRows();
+        bilingue('rank-title', function(it){ return operaDi(p, it); }, function(it){ return operaDi(p, it); }, true)));
+    var nameEl = card.querySelector('.rank-name-text');
+    if (nameEl) {
+      nameEl.addEventListener('click', function(e) { e.stopPropagation(); modalReturn = null; openModal(i); });
+      nameEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); modalReturn = null; openModal(i); }
+      });
+    }
+    carte.appendChild(card);
 }
 
 /* Compattazione mirata della riga nome. Conta le righe di testo occupate da
@@ -6963,7 +7083,10 @@ function openSiteSearch() {
   // proprio nei casi per cui l'utente l'ha chiesta.
   function vai(r) {
     var sel = '.rank-item[data-idx="' + r.i + '"]';
-    if (!document.querySelector(sel)) { svelate.add(r.i); renderList(); }
+    // ⚠️ Una card non disegnata può essere solo più in basso (si disegna fino a lei) oppure
+    // fuori dai filtri (si svela, si ridisegna, e poi si disegna fino a lei).
+    if (!document.querySelector(sel)) disegnaFinoA(r.i);
+    if (!document.querySelector(sel)) { svelate.add(r.i); renderList(); disegnaFinoA(r.i); }
     chiudi('fast');
     requestAnimationFrame(function() {
       var card = document.querySelector(sel);
@@ -8531,7 +8654,7 @@ function buildJumpArm(fab, home) {
     // Di più: sono proprio quelli a rimandare il rientro, così il glifo se ne va un
     // secondo dopo che la corsa è finita e non mentre è in volo.
     leap: function() {
-      pageScrollTo(toward > 0 ? sEl().scrollHeight : 0, true);
+      if (toward > 0) vaiInFondo(true); else pageScrollTo(0, true);
       hold();
     }
   };
@@ -8788,7 +8911,7 @@ function showJumpFabsTemporarily() {
   var btnTop  = mk(TOP,  'Vai in cima',  function(){ pageScrollTo(0, true); });
   var btnPgUp = mk(PGUP, 'Pagina su',    function(){ pageScrollTo(sEl().scrollTop - window.innerHeight * 0.85, true); });
   var btnPgDn = mk(PGDN, 'Pagina giù',   function(){ pageScrollTo(sEl().scrollTop + window.innerHeight * 0.85, true); });
-  var btnBot  = mk(BOT,  'Vai in fondo', function(){ pageScrollTo(sEl().scrollHeight, true); });
+  var btnBot  = mk(BOT,  'Vai in fondo', function(){ vaiInFondo(true); });
   wrap.appendChild(btnTop);
   wrap.appendChild(btnPgUp);
   wrap.appendChild(btnPgDn);
