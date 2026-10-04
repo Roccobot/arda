@@ -13,6 +13,17 @@
 > suoi indirizzi, e in `top/` resta una paginetta che rimanda al nuovo indirizzo conservando
 > parametri e ancora, per i link salvati e le app installate: non si toglie.
 
+## 🪞 Il nucleo del funzionamento è lo stesso del sito gemello
+
+- ⚠️⚠️ **Regola dell'utente, 2026-10-04**: *il nucleo del funzionamento dei siti gemelli deve essere
+  uguale*. Fra 'I Grandi di Arda' e 'I Grandi di Terramare' cambiano la lore e il design; il
+  funzionamento di base (disegno e misura della lista, anti-jitter, caricamento, caratteri, ricerca,
+  salti, riordino, Pannello) è lo stesso, e una modifica a uno dei due si porta sull'altro nello
+  stesso giro.
+- ⚠️ **Le divergenze che esistono sono dichiarate nelle due regole**, con la ragione (per esempio la
+  cache delle misure al cambio lingua, che qui c'è e su Terramare no): una divergenza non dichiarata
+  è un difetto.
+
 ## ⚠️⚠️⚠️ SI MODIFICANO `index.src.html` E `admin.src.js`: `index.html` E `admin.js` SONO GENERATI
 
 Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'amministrazione vive in
@@ -77,6 +88,19 @@ Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'am
   riga sopra il titolo e ai lati del link del footer (classe `.stella`): nessun font del sito la
   contiene, quindi la disegnava un carattere di sistema diverso su ogni telefono (via libera
   dell'utente).
+- ⚠️⚠️ **Dalla `15.85` il carattere che si vede prima dello scambio è TARATO su EB Garamond**: le due
+  famiglie di ripiego `EBG Ripiego T` (Times New Roman, o Liberation Serif) ed `EBG Ripiego N` (Noto
+  Serif di Android), con `size-adjust` e le correzioni di ascendenti e discendenti, tondo e corsivo,
+  subito dopo `EB Garamond` in tutte le pile. Il report del telefono della `15.75` dava CLS 0,015,
+  tutto su `#intro`.
+  - **I valori sono quelli di Terramare**, misurati nel browser sui testi di quella pagina: il
+    rapporto dipende dai due caratteri più che dal testo, e qui l'intestazione resta ferma allo
+    scambio a 390, 412, 768 e 1280 px (sonda `swap-probe` nello scratchpad della sessione). Il metodo
+    e le trappole vivono in `earthsea/Rules.md`, § 'I caratteri sono in casa, e sono due famiglie'.
+  - ⚠️ **Una taratura è una media**: qualche card cambia ancora riga allo scambio (a 390 px la
+    seconda), sotto il primo schermo o al suo bordo.
+- ⚠️ **I sei file di `Cinzel Decorative` sono stati tolti dal repo con la `15.85`**: nessuna pagina li
+  chiedeva più dalla `15.73`.
 - Il gemello 'I Grandi di Terramare' ha lo stesso impianto: le due cose si cambiano insieme.
 
 ## 🤖 Leggibile senza JavaScript e dagli agenti
@@ -186,6 +210,25 @@ misura sola diceva zero mentre l'occhio vedeva muoversi'; qui restano quelle di 
     misura che serve. Su Terramare il banco anti-jitter l'ha visto a 768 e 800 px.
   - Il perché per esteso, e le misure di partenza, vivono in `earthsea/Rules.md` § 'La misura gira A
     LOTTI, e le card in vista vengono prima': il meccanismo è lo stesso sui due siti.
+- ⚠️⚠️ **Dalla `15.85` la lista si disegna A TRATTI** (proposta dell'utente, 2026-10-04: *l'anti-jitter
+  è una contromisura visuale, e non ha senso applicarla a ciò che non si vede*): `renderList` disegna
+  le prime `LOTTO_PRIMO` card, e una sentinella alta zero in coda alla lista (`.rank-tratto`) ne
+  aggiunge altrettante quando arriva a una schermata e mezza dal fondo; ogni tratto passa da
+  `misuraCard` da solo. Il meccanismo, le sue trappole e la certificazione vivono in
+  `earthsea/Rules.md`, § 'Le card nascono mentre si scorre: il disegno A TRATTI': il codice è lo stesso.
+  - **La lista INTERA la disegna `disegnaTutto`**, con un anello d'attesa nei colori dei dischi del
+    FAB: salto in fondo (FAB, tasto desktop, `Ctrl`/`Cmd`+Freccia giù), `Cmd`/`Ctrl`+`F`, il parametro
+    **`?d=full`**, il riordino e l'area admin. La ricerca del sito disegna fino alla voce e un tratto
+    dopo.
+  - ⚠️⚠️ **La cache del cambio lingua regge perché un ridisegno rifà almeno le card che c'erano**: la
+    fotografia di `setLang` copre le card disegnate, e `applicaFoto` le ritrova tutte. Un ridisegno
+    più corto la farebbe scartare, e il cambio lingua tornerebbe a misurare.
+  - ⚠️ **Gestori del nome e dimensioni delle icone nascono con la card** (`emettiCarta`, e
+    `dimensioniIcone` sul tratto prima di inserirlo): un passaggio sulla lista intera dopo il disegno
+    non vedrebbe le card dei tratti successivi.
+  - **Certificato**: card disegnate scorrendo identiche alla lista intera, cambio lingua a metà
+    pagina senza movimento (320-1280 px), e banco anti-jitter con `?d=full` identico alla `15.75`
+    su quattordici larghezze.
 - **Costo dichiarato e accettato**: la misura completa dopo un ridimensionamento costa circa due
   volte e mezzo la `15.66`, perché misura due lingue; il cambio lingua costa come la `15.66`, grazie
   alla cache.

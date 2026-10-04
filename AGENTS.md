@@ -293,6 +293,14 @@ Un file più specifico vince **dove parla**, e il suo silenzio non è una deroga
   `document.fonts.size` (`Rules.md` § '🔬 Misure tipografiche: servire i font REALI ai test').
   axe non valuta il contrasto sulle card: là si misura sui pixel (`Rules.md`
   § '🎨 Colore card (sistema cardcolor)').
+- ⚠️⚠️ **Il nucleo del funzionamento è lo stesso di 'I Grandi di Terramare'** (regola dell'utente):
+  cambiano lore e design, e una modifica al funzionamento di base si porta sull'altro sito nello
+  stesso giro; le divergenze si dichiarano (`Rules.md` § '🪞 Il nucleo del funzionamento è lo stesso
+  del sito gemello').
+- **La lista si disegna a tratti** (dalla `15.85`): dodici card all'avvio, altre dodici scorrendo,
+  e la lista intera col salto in fondo, `Cmd`/`Ctrl`+`F`, `?d=full`, il riordino e l'area admin; un
+  banco che misura tutta la lista si lancia con `?d=full` (`Rules.md` § '↕️ Anti-jitter al cambio
+  lingua').
 - **Diverse funzioni sono nate insieme a 'I Grandi di Terramare'** e ne condividono codice o
   testo (il titolone, il messaggio del salvataggio dell'ordine): si cambiano sui due siti
   insieme. I banchi `test-zoom-gesture.js` e `test-site-search.js` vivono nell'hub perché
