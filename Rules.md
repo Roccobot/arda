@@ -99,6 +99,18 @@ Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'am
     e le trappole vivono in `earthsea/Rules.md`, § 'I caratteri sono in casa, e sono due famiglie'.
   - ⚠️ **Una taratura è una media**: qualche card cambia ancora riga allo scambio (a 390 px la
     seconda), sotto il primo schermo o al suo bordo.
+- ⚠️⚠️ **Anche il titolone ha il suo ripiego tarato, `Cinzel Ripiego T` e `Cinzel Ripiego N`** (dalla
+  `15.87`, richiesta dell'utente): senza, il suo testo saliva di 5-11px all'arrivo di Cinzel. Le correzioni
+  di ascendenti e discendenti vengono dalle metriche del file (976 e 372 su 1000), divise per
+  `size-adjust`, che è il **minimo** dei rapporti di larghezza misurati sui titoli dei due siti nelle
+  due lingue (134% per Times, 115% per Noto Serif): così il ripiego non è mai più largo del vero e non
+  manda il titolo a capo prima del tempo. Il testo del titolone non si sposta più in verticale.
+  - ⚠️ **Vale per il solo `h1`**: il rapporto di larghezza fra Cinzel e un serif comune va da 1 (testi
+    in maiuscolo, come il crest) a 1,4 (minuscole, che in Cinzel sono maiuscoletti), quindi un ripiego
+    unico per tutti i testi in Cinzel sbaglierebbe da una parte o dall'altra.
+  - ⚠️ **Il caso al limite**: il ripiego è qualche punto più stretto, quindi in una fascia di pochi px
+    sotto la soglia in cui il titolo passa a una riga può entrarci col ripiego e non col vero (misurato
+    su Arda a 1245px, solo con Cinzel bloccato). All'arrivo del carattere `pareggiaTitolo` rimisura.
 - ⚠️ **I sei file di `Cinzel Decorative` sono stati tolti dal repo con la `15.85`**: nessuna pagina li
   chiedeva più dalla `15.73`.
 - Il gemello 'I Grandi di Terramare' ha lo stesso impianto: le due cose si cambiano insieme.
