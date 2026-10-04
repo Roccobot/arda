@@ -6280,7 +6280,9 @@ var _reflowChiave = '';
 function chiaveReflow() {
   var l = document.getElementById('rank-list'), n = 0, st = 'loaded';
   if (document.fonts) { st = document.fonts.status; document.fonts.forEach(function(f){ if (f.status === 'loaded') n++; }); }
-  return st + '|' + n + '|' + (l ? l.clientWidth : 0);
+  // ⚠️ Anche la larghezza della FINESTRA: sopra la larghezza massima la lista resta ferma, ma i
+  // corpi del testo in `vw` e le soglie delle media query cambiano lo stesso le righe.
+  return st + '|' + n + '|' + (l ? l.clientWidth : 0) + '|' + window.innerWidth;
 }
 // ── La misura A LOTTI, un fotogramma per volta (15.72) ─────────────────────────────────
 // `misuraCard` su tutta la lista era un'attività sola (742 ms sul mobile simulato, con dieci

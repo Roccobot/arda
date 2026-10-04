@@ -133,6 +133,10 @@ misura sola diceva zero mentre l'occhio vedeva muoversi'; qui restano quelle di 
     chiave** (`chiaveReflow`): fino alla `15.71` all'avvio leggeva il bordo esterno e nella notifica
     il solo contenuto, senza padding, quindi la prima notifica chiamava il timer per niente. Qui la
     chiave lo fermava; su Terramare, dove il timer non la guardava, rifaceva la misura intera.
+  - ⚠️⚠️ **La chiave contiene anche la larghezza della FINESTRA** (`window.innerWidth`, dalla
+    `15.72`): sopra la larghezza massima la lista resta ferma, ma i corpi in `vw` e le soglie delle
+    media query cambiano le righe lo stesso, e un timer che guardasse la sola lista salterebbe una
+    misura che serve. Su Terramare il banco anti-jitter l'ha visto a 768 e 800 px.
   - Il perché per esteso, e le misure di partenza, vivono in `earthsea/Rules.md` § 'La misura gira A
     LOTTI, e le card in vista vengono prima': il meccanismo è lo stesso sui due siti.
 - **Costo dichiarato e accettato**: la misura completa dopo un ridimensionamento costa circa due
