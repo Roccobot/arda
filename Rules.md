@@ -940,6 +940,20 @@ rendono lo **stesso** numero di righe: si **forza l'a-capo** su quella che ne fa
   titolone vive in regole appese a `#title`, e un clone senza quell'id renderebbe con un altro
   carattere. Le scritture avvengono nello stesso frame di layout, quindi nessuno vede il titolo
   nella lingua sbagliata, e un `finally` lo rimette anche se una misura va in errore.
+- ⚠️⚠️ **Prima dello script il titolo è già spezzato come lo spezzerà `pareggiaTitolo`** (dalla
+  `15.86`, B1 dell'utente: *su mobile sì, su desktop e sui monitor grandi deve continuare a stare su una
+  riga*). L'HTML statico scrive il titolo in due span con la classe `ti-statico`, e una regola CSS lo
+  manda a capo sotto i **1245px**, dove il titolo finale va sempre su due righe (misurato coi font veri
+  da 320 a 1440px, nelle due lingue); sopra, resta su una riga come prima. `pareggiaTitolo` toglie la
+  classe **prima** di misurare, e da lì decide lui.
+  - **Perché**: il titolo nasceva su una riga e lo script, che sulla rete lenta arriva dopo i 616 KB di
+    `dati.js` (circa 7 s nel profilo di Lighthouse), lo spezzava spingendo giù tutta la pagina: era tutto
+    il CLS del sito, 0,015 (misurato con un osservatore degli spostamenti a rete e processore rallentati).
+  - ⚠️ **È l'unica soglia in px del titolone, e vale per il solo istante prima dello script**: se cambia
+    il corpo del titolo (`clamp` di `h1`) o il testo, la soglia si rimisura, o il primo disegno torna a
+    divergere da quello finale.
+  - ⚠️ **Resta lo spostamento dello scambio di Cinzel**: il testo del titolone sale di 5-11px quando
+    arriva il carattere vero (CLS fra 0,002 e 0,009), senza muovere il resto della pagina.
 - ⚠️ **Si richiama in TRE punti**: `document.fonts.ready` (una misura fatta prima dei font vale per un
   altro carattere), il `resize` con lo stesso debounce di `reflowRows`, e `setLang`.
 
