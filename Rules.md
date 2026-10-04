@@ -926,6 +926,8 @@ dell'utente).
   salvataggio dell'ordine'.
 - ⚠️ **L'a capo vuole `white-space:pre-line` sul toast**: `textContent` da solo non lo rende, e
   `innerHTML` resta vietato.
+- **Dalla `15.75` il toast è una regione annunciata** (`role="status"`, `aria-atomic`): i lettori
+  di schermo leggono salvataggi ed errori senza spostare il fuoco. Vale anche sul sito gemello.
 
 ## 🔐 Admin e segreti
 
@@ -1836,6 +1838,11 @@ coi PNG originali conservati come backup non referenziato.
   universale, e si ripulisce prima di rilasciare quello che non lo è.
 - Criteri estetici di consulenza: colori troppo saturi rispetto agli altri badge, e dettagli SVG
   troppo fini per la dimensione reale di circa 22px (la spilla della Compagnia, l'occhio di Sauron).
+- ⚠️ **Misura scartata: `loading="lazy"` sulle icone dei badge** (2026-10-04, `15.75` in prova). A
+  390px si scaricavano 27 icone su 28 anche così, perché Chrome anticipa le immagini pigre entro
+  circa 1.250-2.500 px dallo schermo e quasi tutti i tipi di badge compaiono nelle prime card; scritto
+  dopo la creazione dell'immagine non serve affatto, perché il download parte quando l'immagine nasce.
+  Le icone pesano 468 KB in tutto e si scaricano una volta per tipo, non per card.
 
 ## 📝 Note e Note editoriali (modale 'Risorse e note')
 
