@@ -90,6 +90,19 @@ misura sola diceva zero mentre l'occhio vedeva muoversi'; qui restano quelle di 
 - ⚠️ **Sul telefono la lingua si cambia DAL PANNELLO**, quindi anche lui resta fermo: la nota in
   fondo ha la sua gemella impilata. ⚠️ Il Pannello usa ancora `.bil`, la griglia: là la riserva
   orizzontale è voluta, e le card non usano più quella classe.
+- ⚠️⚠️ **Dalla `15.72` la misura gira A LOTTI, un fotogramma per volta** (richiesta dell'utente
+  del 2026-10-04: *considero di primaria importanza il caricamento progressivo*): `reflowRows`
+  ordina le card con `perVista` (prima quelle in vista, poi le altre per distanza dallo schermo)
+  e `inLotti` passa a `misuraCard` il primo lotto in modo sincrono (`LOTTO_PRIMO`, dodici) e gli
+  altri (`LOTTO`, sedici) con `requestAnimationFrame`. È lecito per la stessa ragione della
+  verifica in ozio: le card dipendono dalla sola larghezza della lista, non l'una dall'altra.
+  - ⚠️ **`_reflowChiave` resta vuota finché l'ultimo lotto non è passato**: un ridimensionamento o
+    `fonts.ready` arrivati a metà rifanno tutto, e la fotografia del cambio lingua si scarta da sé.
+  - ⚠️ **`reflowRows()` non è più sincrona sulle card fuori vista**: un banco che misura subito
+    dopo vede assestate le sole card in vista, e aspetta (il banco di certificazione aspetta 1,2 s
+    per larghezza). L'animazione di comparsa è delle sole dodici card del primo lotto (`.rk-in`).
+  - Il perché per esteso, e le misure di partenza, vivono in `earthsea/Rules.md` § 'La misura gira A
+    LOTTI, e le card in vista vengono prima': il meccanismo è lo stesso sui due siti.
 - **Costo dichiarato e accettato**: la misura completa dopo un ridimensionamento costa circa due
   volte e mezzo la `15.66`, perché misura due lingue; il cambio lingua costa come la `15.66`, grazie
   alla cache.
