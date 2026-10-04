@@ -34,6 +34,27 @@ Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'am
     quindi un banco su `index.src.html` guarda il codice admin vecchio.
 - **In locale** si genera con `node .github/scripts/minify.mjs .` dalla radice (con esbuild), e si
   serve la cartella come sempre.
+- ⚠️⚠️ **Dalla `15.72` il generato carica gli script DIFFERITI, e lo script principale vive in
+  `app.js`** (caricamento progressivo, priorità dell'utente del 2026-10-04). Nel sorgente lo
+  script principale resta in linea dopo `<script src="dati.js">` sincrono, e il parser si fermava
+  su 616 KB di dati prima di disegnare qualcosa: nel generato `dati.js` ha `defer` e lo script
+  principale esce in `app.js`, anch'esso `defer`, con la versione del sito nell'indirizzo
+  (`app.js?v=15.72`, letta dal badge del sorgente), così un `index.html` nuovo non gira mai con un
+  `app.js` vecchio preso dalla cache. L'Action committa anche `app.js`.
+  - ⚠️ **`app.js` è uno script classico, non un modulo**: funzioni e `let` di primo livello restano
+    globali, come li aspettano `admin.js` e i gestori nel markup. Il sorgente aperto da sé funziona
+    uguale, perché i suoi script sono già in fondo al body.
+  - ⚠️ **`dati.js` non prende il `?v=`**: lo riscrive il Worker a ogni salvataggio, quando il
+    minificatore non gira, e il flusso dati non si tocca.
+  - ⚠️ **Il minificatore riconosce lo script principale come il più lungo di quelli in linea**
+    (sopra i 50.000 caratteri) e si ferma con errore se non lo trova: chi aggiunge un secondo
+    script in linea grande guardi quel criterio.
+  - ⚠️⚠️ **Lighthouse col throttling SIMULATO punisce il differimento** (misurato qui: da 69 a 57,
+    primo disegno da 2,7 a 6,1 s), mentre nel browser il primo disegno arriva a 340 ms anche con
+    gli script ritardati di quattro secondi (sonda `.memo/scripts/fcp-probe.js` dell'hub): la
+    simulazione vede nel tracciato non rallentato un primo disegno tardo e ci somma il download
+    degli script. Fa fede il throttling `devtools`, che è quello dei report del telefono
+    dell'utente.
 
 ## ↕️ Anti-jitter al cambio lingua
 
@@ -90,6 +111,34 @@ misura sola diceva zero mentre l'occhio vedeva muoversi'; qui restano quelle di 
 - ⚠️ **Sul telefono la lingua si cambia DAL PANNELLO**, quindi anche lui resta fermo: la nota in
   fondo ha la sua gemella impilata. ⚠️ Il Pannello usa ancora `.bil`, la griglia: là la riserva
   orizzontale è voluta, e le card non usano più quella classe.
+- ⚠️⚠️ **Dalla `15.72` la misura gira A LOTTI, un fotogramma per volta** (richiesta dell'utente
+  del 2026-10-04: *considero di primaria importanza il caricamento progressivo*): `reflowRows`
+  ordina le card con `perVista` (prima quelle in vista, poi le altre per distanza dallo schermo)
+  e `inLotti` passa a `misuraCard` il primo lotto in modo sincrono (`LOTTO_PRIMO`, dodici) e
+  tutte le altre card in un solo `requestAnimationFrame`. È lecito per la stessa ragione della
+  verifica in ozio: le card dipendono dalla sola larghezza della lista, non l'una dall'altra.
+  - ⚠️⚠️ **I lotti sono DUE, e la misura che l'ha deciso è di Lighthouse** (throttling
+    `devtools`, mobile, serie di tre corse per variante): coi lotti piccoli (sedici card, con
+    lotto adattivo fra 4 e 32) il tempo di blocco raddoppiava (TBT 5.720 ms contro 2.480-3.000
+    della passata intera) e l'interattività arrivava a 16,4 s invece di 9,1-11,7, perché ogni
+    lotto paga da capo il layout dell'intera lista. Con due lotti il blocco torna a 2.820-3.070
+    ms e le card in vista restano pronte subito (761 ms contro 1.295 nel banco). **Misura
+    scartata: il lotto adattivo**, che non è codice da rimettere.
+  - ⚠️ **`_reflowChiave` resta vuota finché l'ultimo lotto non è passato**: un ridimensionamento o
+    `fonts.ready` arrivati a metà rifanno tutto, e la fotografia del cambio lingua si scarta da sé.
+  - ⚠️ **`reflowRows()` non è più sincrona sulle card fuori vista**: un banco che misura subito
+    dopo vede assestate le sole card in vista, e aspetta (il banco di certificazione aspetta 1,2 s
+    per larghezza). L'animazione di comparsa è delle sole dodici card del primo lotto (`.rk-in`).
+  - ⚠️ **L'osservatore della lista legge la larghezza con `clientWidth`, la stessa misura della
+    chiave** (`chiaveReflow`): fino alla `15.71` all'avvio leggeva il bordo esterno e nella notifica
+    il solo contenuto, senza padding, quindi la prima notifica chiamava il timer per niente. Qui la
+    chiave lo fermava; su Terramare, dove il timer non la guardava, rifaceva la misura intera.
+  - ⚠️⚠️ **La chiave contiene anche la larghezza della FINESTRA** (`window.innerWidth`, dalla
+    `15.72`): sopra la larghezza massima la lista resta ferma, ma i corpi in `vw` e le soglie delle
+    media query cambiano le righe lo stesso, e un timer che guardasse la sola lista salterebbe una
+    misura che serve. Su Terramare il banco anti-jitter l'ha visto a 768 e 800 px.
+  - Il perché per esteso, e le misure di partenza, vivono in `earthsea/Rules.md` § 'La misura gira A
+    LOTTI, e le card in vista vengono prima': il meccanismo è lo stesso sui due siti.
 - **Costo dichiarato e accettato**: la misura completa dopo un ridimensionamento costa circa due
   volte e mezzo la `15.66`, perché misura due lingue; il cambio lingua costa come la `15.66`, grazie
   alla cache.

@@ -1953,7 +1953,10 @@ footer p { color:var(--parchment-dim); font-size:0.95rem; max-width:500px; margi
   #footer-links { font-size:clamp(12px, 3.2vw, 16px); white-space:nowrap; }
 }
 
-.list-animate .rank-item { opacity:0; transform:translateY(20px); animation:reveal 0.8s forwards; }
+/* ⚠️ Solo le card del PRIMO LOTTO (`.rk-in`, le prime dodici) hanno l'animazione di comparsa
+   (15.72): le altre nascono fuori dallo schermo, e 200 animazioni di `transform` al primo
+   disegno costavano un compositing a vuoto. Il ritardo per card era già saturo a dodici. */
+.list-animate .rank-item.rk-in { opacity:0; transform:translateY(20px); animation:reveal 0.8s forwards; }
 
 @keyframes reveal { to { opacity:1; transform:translateY(0); } }
 
@@ -2871,7 +2874,7 @@ var FEATURES = { genderLegendPill: false, langSwitchMobile: false, oneRing: 'A',
 <body>
 <header>
   <div class="brand-corner">
-    <a class="home-link" href="https://roccobot.me" target="_blank" rel="noopener">roccobot.me</a><span class="version-badge"><span class="vb-v">v</span>15.71</span>
+    <a class="home-link" href="https://roccobot.me" target="_blank" rel="noopener">roccobot.me</a><span class="version-badge"><span class="vb-v">v</span>15.72</span>
   </div>
   <button class="lang-switch" id="lang-switch" aria-label="Switch language"><span class="ls-face">EN</span><span class="ls-measure" aria-hidden="true">EN</span></button>
   <div class="crest" id="crest">Roccobot presenta</div>
@@ -5698,7 +5701,11 @@ function renderList(foto) {
     // ⚠️ Icone dei badge e simbolo di genere vengono da COSTANTI del codice (i modelli di
     // `BADGE_ICON` e `GENDER_ICON`, con le etichette di `ICON_LABEL`), quindi passano da
     // `htmlCostante`; tutto il resto della card è dato e va nel DOM come testo.
-    carte.appendChild(nodo('div', { 'class': classes, style: 'animation-delay:' + (Math.min(visN, 12) * 0.04) + 's' + ccInline, 'data-idx': i },
+    // Le prime dodici card hanno l'animazione di comparsa (`.rk-in`, vedi il CSS): sono quelle
+    // che il visitatore vede arrivare, e il ritardo a scalare era già saturo a dodici.
+    var conReveal = visN <= LOTTO_PRIMO;
+    var stileCard = (conReveal ? 'animation-delay:' + (Math.min(visN, 12) * 0.04) + 's' : '') + ccInline;
+    carte.appendChild(nodo('div', { 'class': classes + (conReveal ? ' rk-in' : ''), style: stileCard || null, 'data-idx': i },
       // Bordino sinistro: striscia in sovrapposizione (assoluta, nessun impatto
       // sul layout), colore dal contorno dell'etichetta tipo (2a se più d'una).
       // Spessore 4px normali / 8px podio via CSS (.vis-top .rank-strip).
@@ -6273,18 +6280,62 @@ var _reflowChiave = '';
 function chiaveReflow() {
   var l = document.getElementById('rank-list'), n = 0, st = 'loaded';
   if (document.fonts) { st = document.fonts.status; document.fonts.forEach(function(f){ if (f.status === 'loaded') n++; }); }
-  return st + '|' + n + '|' + (l ? l.clientWidth : 0);
+  // ⚠️ Anche la larghezza della FINESTRA: sopra la larghezza massima la lista resta ferma, ma i
+  // corpi del testo in `vw` e le soglie delle media query cambiano lo stesso le righe.
+  return st + '|' + n + '|' + (l ? l.clientWidth : 0) + '|' + window.innerWidth;
+}
+// ── La misura A LOTTI, un fotogramma per volta (15.72) ─────────────────────────────────
+// `misuraCard` su tutta la lista era un'attività sola (742 ms sul mobile simulato, con dieci
+// confini lettura/scrittura per passata), e all'avvio girava due volte (font di ripiego, poi
+// font veri). Le card dipendono dalla sola larghezza della lista, non l'una dall'altra (la
+// verifica in ozio lo sfrutta già a blocchi di venti), quindi la passata si spezza in DUE: il
+// primo lotto, sincrono, sono le card in vista, e tutte le altre seguono nel fotogramma dopo.
+// ⚠️ Un lavoro nuovo annulla quello in corso, e `_reflowChiave` resta vuota finché il secondo
+// lotto non è passato: così un ridimensionamento o `fonts.ready` arrivati a metà rifanno tutto,
+// con la larghezza e i font di adesso. ⚠️ `LOTTO_PRIMO` è anche il numero di card con
+// l'animazione di comparsa (`.rk-in`): sono le stesse card, quelle che il visitatore vede arrivare.
+// ⚠️⚠️ DUE LOTTI E NON TANTI: misurato con Lighthouse (throttling devtools, mobile) sulla stessa
+// pagina, i lotti piccoli (sedici card, adattivi fra 4 e 32) raddoppiavano il tempo di blocco
+// (TBT 5.720 ms contro 2.480-3.000 della passata intera), perché ogni lotto paga da capo il
+// layout dell'intera lista; con due lotti il blocco torna a quello della passata intera (2.820,
+// 3.070 ms) e resta il vantaggio delle card in vista pronte subito (761 ms contro 1.295).
+var LOTTO_PRIMO = 12, _lottiRaf = 0;
+// Le card in vista per prime, poi le altre per distanza dallo schermo. Si legge `offsetTop`,
+// che ignora la `transform` dell'animazione di comparsa.
+function perVista(carte) {
+  var y0 = window.scrollY, y1 = y0 + window.innerHeight, dentroV = [], fuori = [], i, c, t, b;
+  for (i = 0; i < carte.length; i++) {
+    c = carte[i]; t = c.offsetTop; b = t + c.offsetHeight;
+    if (b >= y0 && t <= y1) dentroV.push(c);
+    else fuori.push({ c: c, d: t > y1 ? t - y1 : y0 - b });
+  }
+  fuori.sort(function(a, b){ return a.d - b.d; });
+  for (i = 0; i < fuori.length; i++) dentroV.push(fuori[i].c);
+  return dentroV;
+}
+function inLotti(carte, lavoro, fine) {
+  if (_lottiRaf) cancelAnimationFrame(_lottiRaf);
+  _lottiRaf = 0;
+  var ordinate = perVista(carte), prime = ordinate.slice(0, LOTTO_PRIMO), resto = ordinate.slice(LOTTO_PRIMO);
+  if (prime.length) lavoro(prime);
+  if (!resto.length) { if (fine) fine(); return; }
+  _lottiRaf = requestAnimationFrame(function(){
+    _lottiRaf = 0;
+    lavoro(resto);
+    if (fine) fine();
+  });
 }
 function reflowRows() {
   _verifica++;
-  misuraCard(Array.prototype.slice.call(document.querySelectorAll('#rank-list .rank-item')));
+  _reflowChiave = '';
   if (midlinesOn) placeCardMidlines();
   // ⚠️ Anche il titolone (15.68): chi chiama `reflowRows` ha cambiato la larghezza utile o la
   // scala (lo zoom della Modalità XL col tasto `Z`, la vista divisa degli editor), e il titolo
   // restava pareggiato sulla misura di prima. Col tasto `Z` il primo cambio lingua lo faceva
   // passare da una riga a due, e con lui l'intestazione di 109px.
   pareggiaTitolo(); riservaTesta();
-  _reflowChiave = chiaveReflow();
+  inLotti(Array.prototype.slice.call(document.querySelectorAll('#rank-list .rank-item')), misuraCard,
+          function(){ _reflowChiave = chiaveReflow(); });
 }
 // ⚠️⚠️ AL RIDIMENSIONAMENTO SI MISURA UNA VOLTA SOLA, A LARGHEZZA FERMA (15.68): la finestra e
 // l'osservatore della lista chiamano lo STESSO timer, e le card si rimisurano solo se la larghezza
@@ -6308,10 +6359,15 @@ var _roW = 0;
 (function(){
   var lista = document.getElementById('rank-list');
   if (!lista || !window.ResizeObserver) return;
-  _roW = Math.round(lista.getBoundingClientRect().width);
+  // ⚠️ La larghezza si legge SEMPRE con `clientWidth`, che è anche la misura della chiave
+  // (`chiaveReflow`). Fino alla 15.71 l'avvio leggeva il bordo esterno e la notifica il solo
+  // contenuto (`contentRect`, senza padding): la prima notifica, che arriva sempre, vedeva una
+  // lista più stretta e chiamava il timer per niente. Qui la chiave lo fermava; su Terramare,
+  // dove il timer non la guardava, rifaceva l'intera misura all'avvio.
+  _roW = lista.clientWidth;
   try {
-    new ResizeObserver(function(voci){
-      var w = Math.round(voci[0].contentRect.width);
+    new ResizeObserver(function(){
+      var w = lista.clientWidth;
       if (w === _roW) return;
       _roW = w;
       pianificaReflow();

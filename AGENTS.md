@@ -231,8 +231,9 @@ Un file più specifico vince **dove parla**, e il suo silenzio non è una deroga
   `dati.js` via Worker. Un salvataggio arrivato a lavoro iniziato è la base, e le proprie
   modifiche si riapplicano sopra **per nome**, mai per indice, ripartendo dal suo numero di
   versione (regole dell'hub, § '🌿 Branch, allineamento e push').
-- **Si modificano `index.src.html` e `admin.src.js`**: `index.html` e `admin.js` li genera
-  l'Action `arda-minify.yml` a ogni push, e una modifica fatta lì la cancella il build dopo. In
+- **Si modificano `index.src.html` e `admin.src.js`**: `index.html`, `app.js` (lo script
+  principale, differito dalla `15.72`) e `admin.js` li genera l'Action `arda-minify.yml` a ogni
+  push, e una modifica fatta lì la cancella il build dopo. In
   `Rules.md` 'index.html' vuol dire il sorgente; in locale si genera con `node
   .github/scripts/minify.mjs .` (`Rules.md` § '⚠️⚠️⚠️ SI MODIFICANO `index.src.html` E
   `admin.src.js`: `index.html` E `admin.js` SONO GENERATI').
