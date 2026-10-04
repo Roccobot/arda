@@ -56,6 +56,29 @@ Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'am
     degli script. Fa fede il throttling `devtools`, che è quello dei report del telefono
     dell'utente.
 
+## 🔤 I caratteri sono in casa, e sono due famiglie
+
+- ⚠️⚠️ **Dalla `15.73` i caratteri vivono in `fonts/`**, dichiarati da un blocco `@font-face` in testa a
+  `index.src.html`, e Google Fonts non c'è più: il suo foglio di stile bloccava il primo disegno
+  sul telefono dell'utente per più di un secondo (report Lighthouse della `2.62` di Terramare,
+  1.310 ms). I file li scarica `.memo/scripts/fonts-fetch.mjs` dell'hub, sottoinsiemi latin e
+  latin-ext, con `font-display:swap`; la licenza è la SIL Open Font License 1.1.
+- ⚠️⚠️ **Le famiglie sono DUE, `Cinzel` ed `EB Garamond`**: `Cinzel Decorative` è uscito per scelta
+  dell'utente (A2, 2026-10-04), dopo il confronto coi file veri, perché le sole differenze erano gli
+  svolazzi delle maiuscole. Titolone, riga 'Roccobot presenta' e nome nella scheda del personaggio sono in `Cinzel`, che la
+  pagina scaricava già per altri testi: tre file in meno e nessuno in più.
+  - ⚠️ **`Cinzel` è più stretto**: un titolo che con Decorative andava a capo può stare su una
+    riga, e il pareggio delle righe del titolone fra le due lingue resta il presidio contro il salto.
+  - ⚠️ **Il `padding-bottom:0.14em` del titolone resta** benché gli svolazzi bassi non ci siano
+    più: toglierlo cambierebbe l'altezza dell'intestazione, e la riserva è innocua.
+- **Si precaricano i due file che servono subito** (`Cinzel` latin per il titolone, `EB Garamond`
+  latin per le card); gli altri arrivano quando la pagina li usa, come decide `unicode-range`.
+- ⚠️⚠️ **La stella dei fregi (`✦`) è disegnata in SVG**, una maschera CSS col colore del testo, nella
+  riga sopra il titolo e ai lati del link del footer (classe `.stella`): nessun font del sito la
+  contiene, quindi la disegnava un carattere di sistema diverso su ogni telefono (via libera
+  dell'utente).
+- Il gemello 'I Grandi di Terramare' ha lo stesso impianto: le due cose si cambiano insieme.
+
 ## ↕️ Anti-jitter al cambio lingua
 
 Decisione dell'utente: l'anti-jitter **verticale** al cambio lingua c'è anche qui, perché passa
@@ -1397,13 +1420,16 @@ si misura: desktop `1em ≈ 25.6px` CSS **sulla riga nome** della card, mobile `
 conversione dei pixel forniti dall'utente vive nel `Rules.md` dell'hub, § '📐 Misure in pixel →
 unità relative'.
 
-⚠️ **Nell'ambiente Claude Code le webfont NON si caricano da sole**: il foglio di Google Fonts
+⚠️ **Fino alla `15.72` (e per le copie di confronto di quelle versioni), nell'ambiente Claude Code
+le webfont NON si caricavano da sole**: il foglio di Google Fonts
 risponde `ERR_CONNECTION_RESET` al browser di test, che non passa dal proxy come `curl`. Il browser
 ripiega su **Georgia**, e ogni misura di larghezza, a-capo o altezza di riga è **di un altro font**.
 La precondizione, la spia giusta (`document.fonts.size`, mai `document.fonts.check()`, che mente),
 che cosa dipende dal font e il conteggio delle righe vivono in `Roccobot.md` § '🧪 Test e verifiche
 (siti e app web)'.
 
+- ⚠️ **Dalla `15.73` i caratteri sono in casa** (§ '🔤 I caratteri sono in casa, e sono due famiglie'),
+  quindi basta servire la pagina via HTTP e il problema non si presenta.
 - **L'aggancio è COMMITTATO: `.memo/scripts/realfont.js`** dell'hub, che serve anche Terramare.
   Istruzioni, spia attesa ed `executablePath: rf.chromiumPath()` sono nel commento in testa allo
   script; se cambiano le famiglie di font del sito si riallinea la sua costante `GF`.
