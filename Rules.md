@@ -49,6 +49,12 @@ Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'am
   - ⚠️ **Il minificatore riconosce lo script principale come il più lungo di quelli in linea**
     (sopra i 50.000 caratteri) e si ferma con errore se non lo trova: chi aggiunge un secondo
     script in linea grande guardi quel criterio.
+  - ⚠️⚠️ **Lighthouse col throttling SIMULATO punisce il differimento** (misurato qui: da 69 a 57,
+    primo disegno da 2,7 a 6,1 s), mentre nel browser il primo disegno arriva a 340 ms anche con
+    gli script ritardati di quattro secondi (sonda `.memo/scripts/fcp-probe.js` dell'hub): la
+    simulazione vede nel tracciato non rallentato un primo disegno tardo e ci somma il download
+    degli script. Fa fede il throttling `devtools`, che è quello dei report del telefono
+    dell'utente.
 
 ## ↕️ Anti-jitter al cambio lingua
 
