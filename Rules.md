@@ -34,6 +34,21 @@ Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'am
     quindi un banco su `index.src.html` guarda il codice admin vecchio.
 - **In locale** si genera con `node .github/scripts/minify.mjs .` dalla radice (con esbuild), e si
   serve la cartella come sempre.
+- ⚠️⚠️ **Dalla `15.72` il generato carica gli script DIFFERITI, e lo script principale vive in
+  `app.js`** (caricamento progressivo, priorità dell'utente del 2026-10-04). Nel sorgente lo
+  script principale resta in linea dopo `<script src="dati.js">` sincrono, e il parser si fermava
+  su 616 KB di dati prima di disegnare qualcosa: nel generato `dati.js` ha `defer` e lo script
+  principale esce in `app.js`, anch'esso `defer`, con la versione del sito nell'indirizzo
+  (`app.js?v=15.72`, letta dal badge del sorgente), così un `index.html` nuovo non gira mai con un
+  `app.js` vecchio preso dalla cache. L'Action committa anche `app.js`.
+  - ⚠️ **`app.js` è uno script classico, non un modulo**: funzioni e `let` di primo livello restano
+    globali, come li aspettano `admin.js` e i gestori nel markup. Il sorgente aperto da sé funziona
+    uguale, perché i suoi script sono già in fondo al body.
+  - ⚠️ **`dati.js` non prende il `?v=`**: lo riscrive il Worker a ogni salvataggio, quando il
+    minificatore non gira, e il flusso dati non si tocca.
+  - ⚠️ **Il minificatore riconosce lo script principale come il più lungo di quelli in linea**
+    (sopra i 50.000 caratteri) e si ferma con errore se non lo trova: chi aggiunge un secondo
+    script in linea grande guardi quel criterio.
 
 ## ↕️ Anti-jitter al cambio lingua
 
