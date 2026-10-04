@@ -114,9 +114,16 @@ misura sola diceva zero mentre l'occhio vedeva muoversi'; qui restano quelle di 
 - ⚠️⚠️ **Dalla `15.72` la misura gira A LOTTI, un fotogramma per volta** (richiesta dell'utente
   del 2026-10-04: *considero di primaria importanza il caricamento progressivo*): `reflowRows`
   ordina le card con `perVista` (prima quelle in vista, poi le altre per distanza dallo schermo)
-  e `inLotti` passa a `misuraCard` il primo lotto in modo sincrono (`LOTTO_PRIMO`, dodici) e gli
-  altri (`LOTTO`, sedici) con `requestAnimationFrame`. È lecito per la stessa ragione della
+  e `inLotti` passa a `misuraCard` il primo lotto in modo sincrono (`LOTTO_PRIMO`, dodici) e
+  tutte le altre card in un solo `requestAnimationFrame`. È lecito per la stessa ragione della
   verifica in ozio: le card dipendono dalla sola larghezza della lista, non l'una dall'altra.
+  - ⚠️⚠️ **I lotti sono DUE, e la misura che l'ha deciso è di Lighthouse** (throttling
+    `devtools`, mobile, serie di tre corse per variante): coi lotti piccoli (sedici card, con
+    lotto adattivo fra 4 e 32) il tempo di blocco raddoppiava (TBT 5.720 ms contro 2.480-3.000
+    della passata intera) e l'interattività arrivava a 16,4 s invece di 9,1-11,7, perché ogni
+    lotto paga da capo il layout dell'intera lista. Con due lotti il blocco torna a 2.820-3.070
+    ms e le card in vista restano pronte subito (761 ms contro 1.295 nel banco). **Misura
+    scartata: il lotto adattivo**, che non è codice da rimettere.
   - ⚠️ **`_reflowChiave` resta vuota finché l'ultimo lotto non è passato**: un ridimensionamento o
     `fonts.ready` arrivati a metà rifanno tutto, e la fotografia del cambio lingua si scarta da sé.
   - ⚠️ **`reflowRows()` non è più sincrona sulle card fuori vista**: un banco che misura subito
