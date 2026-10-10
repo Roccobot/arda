@@ -974,6 +974,12 @@ rendono lo **stesso** numero di righe: si **forza l'a-capo** su quella che ne fa
     arriva il carattere vero (CLS fra 0,002 e 0,009), senza muovere il resto della pagina.
 - ⚠️ **Si richiama in TRE punti**: `document.fonts.ready` (una misura fatta prima dei font vale per un
   altro carattere), il `resize` con lo stesso debounce di `reflowRows`, e `setLang`.
+- ⚠️⚠️ **Dalla `15.88` la decisione si ricorda** (`chiaveTitolo`): la funzione non rifà le prove se larghezza
+  della pagina, lingua, font caricati, Modalità XL e colonna della vista divisa non sono cambiati, perché ogni
+  prova chiede un'impaginazione completa. Misurato con Lighthouse in tre corse contro la `15.87` servita in
+  locale: il riflusso forzato attribuito a lei scende da 154-247 ms a 0-44, quello della pagina da 417-769 a
+  253-379, col titolo identico a nove larghezze e nelle due lingue. ⚠️ Chi riscrive il titolo azzera la
+  chiave (`setLang` lo fa), o con la stessa lingua resterebbe senza pareggio.
 
 ### ⚠️ Le trappole di misura, che sono tre e valgono oltre il caso
 
