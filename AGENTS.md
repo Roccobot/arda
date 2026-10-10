@@ -289,9 +289,9 @@ Un file più specifico vince **dove parla**, e il suo silenzio non è una deroga
 - **Codice spento, non morto**: gli interruttori di `FEATURES`, i nomi CSS delle Classi e la
   macchina del riordino restano apposta (`Rules.md` § '🚩 Feature flag (elementi disattivati, ma
   non rimossi)').
-- **I font reali nell'ambiente di prova**: le webfont non si caricano da sole, e l'aggancio è
-  `realfont.js` in `.memo/scripts/` dell'hub; `document.fonts.check()` mente, fa fede
-  `document.fonts.size` (`Rules.md` § '🔬 Misure tipografiche: servire i font REALI ai test').
+- **I font reali nell'ambiente di prova**: dalla `15.73` i caratteri sono in casa, e basta servire
+  la pagina via HTTP; per le copie delle versioni precedenti l'aggancio è `realfont.js` in
+  `.memo/scripts/` dell'hub. `document.fonts.check()` mente, fa fede `document.fonts.size` (`Rules.md` § '🔬 Misure tipografiche: servire i font REALI ai test').
   axe non valuta il contrasto sulle card: là si misura sui pixel (`Rules.md`
   § '🎨 Colore card (sistema cardcolor)').
 - ⚠️⚠️ **Il nucleo del funzionamento è lo stesso di 'I Grandi di Terramare'** (regola dell'utente):

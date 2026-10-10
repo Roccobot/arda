@@ -3,7 +3,8 @@
 > **Cos'è questo file.** Il testo completo delle regole del progetto **'I Grandi di Arda'**
 > (<https://roccobot.github.io/arda/>): aspetto, struttura dei dati, canone, badge, asset e note.
 > Vale per **tutti gli agenti**: il nucleo, cioè ogni regola in una riga, vive in `AGENTS.md`, e
-> questo file ne dà il perché. Claude Code lo carica da sé, perché `CLAUDE.md` lo importa.
+> questo file ne dà il perché. Claude Code lo carica da sé, perché `CLAUDE.md` lo importa; gli altri
+> agenti lo leggono quando il lavoro tocca una sua sezione.
 > ⚠️ **Fino al 2026-09-27 questo testo era il `CLAUDE.md` del repo**: una nota che nomina il
 > `CLAUDE.md` del repo `Roccobot/arda` per una di queste sezioni parla di questo file.
 > Le regole **trasversali** (avvio, priorità, non derogabili, lingua, git e go-live) vivono nel
@@ -175,8 +176,10 @@ misura sola diceva zero mentre l'occhio vedeva muoversi'; qui restano quelle di 
   **verifica** rifà le misure vere a blocchi di 20 card quando il browser è libero, e
   `window.__verificaCache` deve valere zero.
 - **Criterio di accettazione**: nessuna card cambia altezza al cambio lingua, a nessuna larghezza,
-  anche dopo un ridimensionamento, nel tema chiaro e in Modalità XL; nessuna riga finisce col `|`;
-  etichette, frecce, icone e simbolo di genere restano alla quota della `15.66`.
+  anche dopo un ridimensionamento, nel tema chiaro e in Modalità XL, e l'intestazione resta ferma al
+  centesimo; nessuna riga finisce col `|`; etichette, frecce, icone e simbolo di genere restano alla
+  quota della `15.66`, e dove c'è l'a capo simmetrico la quota si confronta con la card nella stessa
+  posizione che non ce l'ha.
   - ⚠️ **Il metro di confronto è il caricamento diretto nella lingua**: la `15.66`, dopo un cambio
     lingua, teneva in qualche card il `name-tight` della lingua di prima.
 - ⚠️⚠️ **Le misure si scrivono in PX DI LAYOUT (`zoomDi`)**: `getBoundingClientRect` li dà
@@ -416,15 +419,16 @@ testa alla pagina. Colore **`#ce9d3b`**.
   - ⚠️ **La favicon vive nella chrome del browser**: non entra in axe né nel gate W3C, e non intacca
     l'AA del sito, che resta un vincolo per tutto ciò che è dentro la pagina.
 - ⚠️ **Le misure si fanno sulle barre REALI, non su bianco puro**: su `#ffffff` la stessa tinta
-  guadagna un terzo di punto di contrasto. Le due misure vivono anche nel commento di `favicon.js`,
-  sopra la costante: chi cambia la tinta le riscrive tutte e due.
+  guadagna un terzo di punto di contrasto. Le due misure in vigore (2,12:1 sulla barra chiara, 5,90:1
+  sulla scura) vivono nel commento di `favicon.js`, sopra la costante: chi cambia la tinta le riscrive
+  tutte e due.
 - ⚠️ **Cambiando la tinta si bumpa il `?v=` dei quattro link** della pagina, o la cache del browser,
   tenace sulle icone, mostra la vecchia e fa credere a un deploy mancato.
 - **Area massimizzata, senza ritaglio**: il bbox del glifo, misurato dal browser, coincide col
   viewBox, quindi il margine morto è zero e il glifo è solo scalato a filo del riquadro. La regola
   'icone as-is' resta intatta.
-- **Maschera di contrasto sull'ALFA**, solo per i raster: su un glifo monocromatico è l'alfa a
-  definire la forma (sfocatura 3x3, poi `alfa + 0,35 * (alfa - sfocato)`). L'SVG non applica questa maschera,
+- **Maschera di contrasto sull'ALFA**, solo per i raster, perché nei raster piccoli le aste sottili
+  del glifo sfumavano su due pixel: su un glifo monocromatico è l'alfa a definire la forma (sfocatura 3x3, poi `alfa + 0,35 * (alfa - sfocato)`). L'SVG non applica questa maschera,
   perché il browser lo rasterizza nitido.
 - ⚠️ **`favicon.png` non è stata toccata e resta in cartella**, non referenziata: la copre la regola
   non derogabile sulle immagini esistenti (§ '🧹 Asset del progetto').
@@ -553,8 +557,9 @@ classifica è lunga.
 - ⚠️ **L'evidenza del riscontro si compone a NODI** (`conEvidenza`, con `createTextNode` e un
   `<mark>` vero): `snippet()` dell'editor torna una stringa di markup, che finirebbe in un
   `innerHTML`.
-- **Il tetto è `SS_CAP` (40 righe disegnate), ma il CONTEGGIO resta quello vero**, e chi arriva al
-  tetto legge una riga che glielo dice.
+- **Il tetto è `SS_CAP` (40 righe disegnate), ma il CONTEGGIO resta quello vero**: una query di una
+  lettera trova quasi tutto il dataset, e centinaia di righe da scorrere non aiutano nessuno. Chi
+  arriva al tetto legge una riga che glielo dice.
 - ⚠️ **Il fuoco si dà DOPO l'animazione di entrata** (220ms): dato subito, su iOS, fa salire la
   tastiera mentre la modale si muove.
 - **Il guscio è quello della scheda personaggio** (`buildStdModal`), perché la ricerca la vede il
@@ -802,8 +807,9 @@ condivise con l'anteprima. In UI: tap sulla versione, sblocco, 'Area admin', qui
 
 - **Nome in UI: 'Console'**, uguale nelle due lingue; il nome interno resta `siteFlags`. ⚠️ **Il
   rename toglie una COLLISIONE**: il nome vecchio conteneva 'Pannello', che è la modale del FAB dei
-  visitatori. Su Terramare la stessa confusione è costata due versioni (`earthsea/Rules.md`,
-  § "'Senza nome proprio': dalla Console al Pannello").
+  visitatori, e scriverlo nelle regole non era bastato. Su Terramare lo stesso fraintendimento è
+  capitato due volte (`earthsea/Rules.md`, § '📍 Segno o parola nella colonna origine, e lo decide la
+  CONSOLE').
 - **Nomi e ordine delle voci:** Modalità XL, Bagliore, Numeri colorati, Riflettore, Incisione, Alone
   sfumato, Effetto podio, Colore schede, Trama. Etichette brevi, di una parola dove si può.
 - **'Attiva' / 'Enable'**, non 'Effetto attivo': prima voce di ogni sotto-modale.
@@ -1108,7 +1114,8 @@ normalizzata da **`customPair`**), e il testo della scheda è reso AA da **`ccAa
 - **Sfondo pagina neutro**, al posto del vecchio fondo pergamena caldo, così le tinte di famiglia non
   litigano con lo sfondo. Fondi e accenti di testata, footer e modali sono neutralizzati col **grigio
   a pari luminanza relativa** dell'originale, così i contrasti non si muovono. **Non toccati**:
-  etichette tipo, famiglie `cardcolor`, simboli di genere e fondali a bassa opacità.
+  etichette tipo, famiglie `cardcolor`, simboli di genere e fondali a bassa opacità, questi ultimi
+  perché sono sfondi e non testi.
 - ⚠️ **Il crest 'Roccobot presenta' è NEUTRO nei due temi**, mentre il **link del footer**, che
   condivideva gli stessi hex, resta virato verso il colore del FAB del tema, con un contrasto di
   circa 6:1.
@@ -1116,8 +1123,8 @@ normalizzata da **`customPair`**), e il testo della scheda è reso AA da **`ccAa
   al Nome: la gerarchia la fanno **corpo e peso**. Il corsivo di genealogia e titoli ha lo stesso
   valore, e lo distingue il corsivo.
 - **Peso 400 nei due temi**: il 500 del tema chiaro è più largo e cambiava gli a-capo.
-- **Titolone**: gradiente e alone, con tinte per tema. ⚠️ In chiaro il fondo del gradiente dà
-  **3,20:1** e non si schiarisce. L'alone va con `filter: drop-shadow`, non `text-shadow`, perché
+- **Titolone**: gradiente e alone, con tinte per tema. ⚠️ In chiaro il fondo del gradiente, il punto
+  più chiaro, dà **3,20:1**: **non si schiarisce**, o il titolo scende sotto soglia. L'alone va con `filter: drop-shadow`, non `text-shadow`, perché
   col `background-clip:text` deve seguire la forma delle lettere. **Scartati**: letterpress inciso,
   contorno con profondità, metallico.
   - ⚠️ **Glifi tagliati in basso**: col `background-clip:text` il gradiente riempie solo il box di
@@ -1226,7 +1233,9 @@ leggeva.
   origine').
 - **Perché era sicuro**: il Worker serializza ogni voce con `JSON.stringify(d)` e valida il solo
   `nome`, e l'editor lavora su una copia profonda dell'array, quindi non esiste un elenco di campi da
-  tenere allineato.
+  tenere allineato. ⚠️ Per `paese` è stato verificato **prima**, e dopo si è rifatta la prova: stesso
+  numero di voci, e l'unica chiave di differenza era quella tolta. Lo stesso metodo vale per ogni
+  campo tolto o rinominato.
 - ⚠️⚠️ **Una scheda admin già APERTA riscrive tutte le voci come le ha in memoria**, campi tolti
   compresi, senza conflitti né errori. Dopo una bonifica del dataset **si ricarica l'editor admin**
   prima di salvare.
@@ -1359,8 +1368,8 @@ dataset**.
   - **Regno, con articolo**: titoli di sovrano (`Re/Principe/Signore del Nargothrond`), genitivi
     riferiti al regno (`popolo/tesoro/fedeli del Nargothrond`) e i locativi dello stare o del
     muoversi entro il regno (`nel`, `sul`, `cacciato dal`).
-  - **Città, senza articolo**: raggiungere fisicamente la città (`a Nargothrond`), le sue
-    rovine, e la città come soggetto o oggetto di saccheggio o caduta, con la concordanza al
+  - **Città, senza articolo**: raggiungere fisicamente la città, o condurvi qualcuno o qualcosa
+    (`a Nargothrond`), le sue rovine, e la città come soggetto o oggetto di saccheggio o caduta, con la concordanza al
     **femminile**: `Nargothrond fu saccheggiata`, `Nargothrond cadde`.
   - **In inglese niente articolo**, nei due sensi.
 
@@ -1663,8 +1672,9 @@ modificatore sono spente in modalità admin.
    proverebbe l'implementazione, non il comportamento.
 
 - **I 'no' contano quanto i 'sì'**: a metà corsa il FAB non annuncia ancora il salto, un rimbalzo
-  piccolo non gira il chevron, e su desktop non succede niente. Il banco serve i due siti, e il sito
-  da provare lo sceglie `PROVA_SITO`.
+  piccolo non gira il chevron, e su desktop non succede niente. ⚠️ **Il banco non è committato**:
+  viveva nello scratchpad di una sessione (`prova-salto-fab.js`, coi due siti scelti da `PROVA_SITO`),
+  e chi rimette mano al motore lo ricostruisce da questa sezione.
 
 ### 🕳️ Che cosa se n'è andato con la colonna
 
@@ -1833,7 +1843,7 @@ lato del sito.
 usano **as-is**, col padding trasparente che l'autore ha lasciato; sulla card hanno **altezza
 uniforme e larghezza automatica**, con una regola scoped che scavalca le classi per icona **solo
 sulle card**. ⚠️ **Non tocca la legenda**, né il wrapping di nomi ed etichette: quelle logiche
-restano separate.
+restano separate, e non si toccano.
 
 - **Due strumenti di correzione, divisi per ASSE, ed è una convenzione.**
   - **ORIZZONTALE: `margin`, SEMPRE A CASCATA** (modello 'caratteri consecutivi'): il margine di
@@ -2041,15 +2051,17 @@ condivisibile una nota nuova basta quel campo.
   colonna lampeggia: passano da un helper che alza il flag e lo riabbassa in `finally`, così una
   riapertura andata male non lo lascia acceso a sabotare la chiusura dopo.
 - **I nomi di personaggio cliccabili prendono la tinta della famiglia di DESTINAZIONE, desaturata al
-  55%**: la famiglia si riconosce e il colpo d'occhio resta quieto. ⚠️ Scartati il 100% e il 30%, dove
-  Noldor e Mezzelfi diventavano indistinguibili. La desaturazione è estetica: l'aggiustamento AA
+  55%**: la famiglia si riconosce e il colpo d'occhio resta quieto. ⚠️ Scartati, sullo stesso
+  confronto: l'accento unico, il 100% e il 30%; al 30% Noldor e Mezzelfi diventavano
+  indistinguibili. La desaturazione è estetica: l'aggiustamento AA
   viene dopo.
 - **Un solo livello di intensità** (scelta dell'utente): la gerarchia la fanno corpo e peso. ⚠️ Sotto
   il **75%** di opacità il tema chiaro scende sotto soglia: per più stacco si agisce sul **peso**.
 - ⚠️ **In tinta va SOLO il titolo del rimando**: `Leggi anche` / `See also` resta del colore del testo,
   e cliccabile resta tutta la riga.
 - **Formato dei rimandi interni:** `Leggi anche → <strong>Titolo</strong>`, prefisso normale, titolo
-  in grassetto, **allineati a sinistra** (richiesta dell'utente).
+  in grassetto, **allineati a sinistra** (richiesta dell'utente). ⚠️ Scartata la centratura,
+  provata per un breve tratto.
 - **Il fondo del Pannello del FAB in tema scuro ha la saturazione DIMEZZATA**, a luminosità identica
   ('può restare un vago sentore di tinta gialla'): è l'unica superficie ampia con una tinta calda in
   scuro, e il chiaro non è toccato.
