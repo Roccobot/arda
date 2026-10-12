@@ -238,33 +238,25 @@ Un file più specifico vince **dove parla**, e il suo silenzio non è una deroga
 - **Che cos'è**: 'I Grandi di Arda', la classifica bilingue (italiano primario, inglese) dei
   personaggi del Legendarium, pubblicata da Pages su <https://roccobot.github.io/arda/>. 'Arda
   Top', 'I Grandi di Arda' e 'Arda' sono sinonimi e nessuno si corregge; 'Grimorio' è
-  terminologia morta (`Rules.md` § '🏷️ Come si chiama questo progetto'). Le regole trasversali
-  vivono nell'hub `Roccobot/roccobot.github.io`; il testo completo di queste vive in `Rules.md`.
+  terminologia morta (`Rules.md` § '🏷️ Come si chiama questo progetto').
 - **Ramo principale `main`**, che riceve anche i **salvataggi admin**: l'editor committa
   `dati.js` via Worker. Un salvataggio arrivato a lavoro iniziato è la base, e le proprie
   modifiche si riapplicano sopra **per nome**, mai per indice, ripartendo dal suo numero di
   versione (regole dell'hub, § '🌿 Branch, allineamento e push').
-- **Si modificano `index.src.html` e `admin.src.js`**: `index.html`, `app.js` (lo script
-  principale, differito dalla `15.72`) e `admin.js` li genera l'Action `arda-minify.yml` a ogni
-  push, e una modifica fatta lì la cancella il build dopo. In
-  `Rules.md` 'index.html' vuol dire il sorgente; in locale si genera con `node
-  .github/scripts/minify.mjs .` (`Rules.md` § '⚠️⚠️⚠️ SI MODIFICANO `index.src.html` E
+- **Si modificano `index.src.html` e `admin.src.js`**: `index.html`, `app.js` e `admin.js` li
+  genera l'Action `arda-minify.yml`, e una modifica fatta lì la cancella il build dopo; l'area
+  admin si prova sulla pagina generata (`Rules.md` § '⚠️⚠️⚠️ SI MODIFICANO `index.src.html` E
   `admin.src.js`: `index.html` E `admin.js` SONO GENERATI').
-- **Il codice admin si scarica al primo ingresso**: una funzione nuova dell'amministrazione va in
-  `admin.src.js`, e l'area admin si prova sulla pagina **generata**.
 - **Versione SlimVer, fonte unica `var datiVersion` in testa a `dati.js`**: il badge in
   `index.src.html` è solo il ripiego se `dati.js` non carica, e il bump tocca i due file. Niente
   prefisso `r`, mai un secondo numero 'vivo' altrove. I salvataggi admin bumpano di +0,01 (anche
   quelli dei micro-aggiustamenti delle icone); colori e flag della Console no
   (`Rules.md` § '🔢 Versione del sito').
 - **Verifica di pubblicazione**: `datiVersion` su <https://roccobot.github.io/arda/dati.js>,
-  letto con `Cache-Control: no-cache`. Il controllo di freschezza è il confronto dei ref più il
-  badge letto col pattern che attraversa lo span della `v`: un pattern che non trova niente si
-  legge come 'allineato' (`Rules.md` § '🔢 Versione del sito').
+  letto con `Cache-Control: no-cache` (`Rules.md` § '🔢 Versione del sito').
 - **Gate W3C a ogni release da +0,1 in su**, prima della PR: Nu Html Checker a 0 errori e 0
-  warning sulle pagine modificate; se non è disponibile si annota e si procede. La proprietà
-  `d` e le regole con `var()` dentro `rgba()` sono iniettate via JS, e non tornano nel CSS
-  statico (`Rules.md` § '⚠️ Gate W3C').
+  warning sulle pagine modificate, e le regole iniettate via JS non tornano nel CSS statico
+  (`Rules.md` § '⚠️ Gate W3C').
 - **Non derogabili in questo repo**: parola d'ordine admin validata solo dal Worker e `GITHUB_PAT`
   solo suo secret (`Rules.md` § '🔐 Admin e segreti'); `innerHTML` a zero, col testo composto da
   `nodo`, `htmlCostante` o `nodiRistretti` secondo la provenienza (`Rules.md` § '🧩 `innerHTML`:
@@ -301,11 +293,9 @@ Un file più specifico vince **dove parla**, e il suo silenzio non è una deroga
 - **Codice spento, non morto**: gli interruttori di `FEATURES`, i nomi CSS delle Classi e la
   macchina del riordino restano apposta (`Rules.md` § '🚩 Feature flag (elementi disattivati, ma
   non rimossi)').
-- **I font reali nell'ambiente di prova**: dalla `15.73` i caratteri sono in casa, e basta servire
-  la pagina via HTTP; per le copie delle versioni precedenti l'aggancio è `realfont.js` in
-  `.memo/scripts/` dell'hub. `document.fonts.check()` mente, fa fede `document.fonts.size` (`Rules.md` § '🔬 Misure tipografiche: servire i font REALI ai test').
-  axe non valuta il contrasto sulle card: là si misura sui pixel (`Rules.md`
-  § '🎨 Colore card (sistema cardcolor)').
+- **I font reali nell'ambiente di prova**: basta servire la pagina via HTTP, e fa fede
+  `document.fonts.size` (`Rules.md` § '🔬 Misure tipografiche: servire i font REALI ai test');
+  il contrasto sulle card si misura sui pixel (`Rules.md` § '🎨 Colore card (sistema cardcolor)').
 - ⚠️⚠️ **Il nucleo del funzionamento è lo stesso di 'I Grandi di Terramare'** (regola dell'utente):
   cambiano lore e design, e una modifica al funzionamento di base si porta sull'altro sito nello
   stesso giro; le divergenze si dichiarano (`Rules.md` § '🪞 Il nucleo del funzionamento è lo stesso
@@ -315,10 +305,8 @@ Un file più specifico vince **dove parla**, e il suo silenzio non è una deroga
   banco che misura tutta la lista si lancia con `?d=full` (`Rules.md` § '↕️ Anti-jitter al cambio
   lingua').
 - **Diverse funzioni sono nate insieme a 'I Grandi di Terramare'** e ne condividono codice o
-  testo (il titolone, il messaggio del salvataggio dell'ordine): si cambiano sui due siti
-  insieme. I banchi `test-zoom-gesture.js` e `test-site-search.js` vivono nell'hub perché
-  servono tutti e due.
-- **Pesante, quindi da concordare prima**: il flusso dati (`dati.js` e il Worker) e le ricerche
-  sulle fonti ampie o sistematiche. Le regole del Worker vivono in `worker/AGENTS.md` e
-  `worker/Rules.md`; dopo un merge che tocca sito e Worker, prima di salvare dalla Console si
-  aspetta la spia `rev`.
+  testo (il titolone, il messaggio del salvataggio dell'ordine): si cambiano sui due siti insieme,
+  e i banchi comuni vivono nell'hub.
+- **Pesante, quindi da concordare prima**: il flusso dati (`dati.js` e il Worker, con le regole
+  in `worker/`) e le ricerche sulle fonti ampie o sistematiche. Dopo un merge che tocca sito e
+  Worker, prima di salvare dalla Console si aspetta la spia `rev`.
