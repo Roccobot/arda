@@ -46,6 +46,11 @@ Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'am
     quindi un banco su `index.src.html` guarda il codice admin vecchio.
 - **In locale** si genera con `node .github/scripts/minify.mjs .` dalla radice (con esbuild), e si
   serve la cartella come sempre.
+  - **`esbuild` è nel registro `docs/Dependencies.json`** dal 2026-10-15 (scelta F1a di Rocco):
+    la sua versione si legge dal comando del workflow di minificazione, e lo script unico del repo
+    del sito la confronta con l'ultima ogni lunedì, aprendo la issue `Dipendenze da leggere` quando
+    ce n'è una nuova. Una versione nuova si legge, e si prova sulla pagina generata, prima di
+    cambiare il workflow (`Roccobot.md` § '🔗 Le dipendenze si seguono').
 - ⚠️⚠️ **Dalla `15.72` il generato carica gli script DIFFERITI, e lo script principale vive in
   `app.js`** (caricamento progressivo, priorità dell'utente del 2026-10-04). Nel sorgente lo
   script principale resta in linea dopo `<script src="dati.js">` sincrono, e il parser si fermava
