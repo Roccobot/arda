@@ -25,6 +25,25 @@
   `CinzelDecorative-900-latin-ext.woff2`.
 - Il comando che riporta un file com'era: `git show c9c2964^:fonts/CinzelDecorative-400-latin.woff2 > CinzelDecorative-400-latin.woff2`.
 
+## 🌐 Google Fonts, e le misure fatte senza i caratteri veri
+
+- **Che cosa faceva**: fino alla `15.72` la pagina chiedeva i caratteri al foglio di Google Fonts
+  (`Cinzel Decorative`, `Cinzel` ed `EB Garamond`, con un `preconnect` a `fonts.googleapis.com`).
+  Nell'ambiente Claude Code le webfont NON si caricavano da sole: il foglio di Google Fonts risponde
+  `ERR_CONNECTION_RESET` al browser di test, che non passa dal proxy come `curl`. Il browser
+  ripiegava su **Georgia**, e ogni misura di larghezza, a-capo o altezza di riga era **di un altro
+  font**.
+- **Tolto nella `15.73`** (2026-10-04), quando i caratteri sono entrati in `fonts/`: il foglio
+  bloccava il primo disegno sul telefono dell'utente per più di un secondo (`Rules.md` § '🔤 I
+  caratteri sono in casa, e sono due famiglie').
+- **Si recupera dal commit `d44b3d5`** del ramo `main`. Dove viveva: i due `<link>` in testa a
+  `index.src.html`.
+- ⚠️ **Una copia di confronto fino alla `15.72` chiede ancora Google Fonts**: si serve con
+  `.memo/scripts/realfont.js` dell'hub, che dirotta il foglio sui file locali, e la spia attesa sulle
+  versioni di allora la dice il commento in testa allo script (`Rules.md` § '🔬 Misure tipografiche:
+  servire i font REALI ai test').
+- Il comando che mostra la pagina di allora: `git show d44b3d5^:index.src.html`.
+
 ## 🗺️ Il campo `paese`
 
 - **Che cosa faceva**: niente, in questo sito. Valeva `gb` su tutte le 360 voci e nessun codice lo
@@ -49,6 +68,23 @@
   `app-dark.svg`, `app-dark-192.png`, `app-dark-512.png`, `app-dark-maskable.svg`,
   `app-dark-maskable-192.png` e `app-dark-maskable-512.png`.
 - Il comando che mostra il disegno di allora: `git show be78ecd^:top/pwa/app-dark.svg`.
+
+## 🌫️ L'effetto `fade`, i bordi della lista in dissolvenza
+
+- **Che cosa faceva**: era uno degli effetti della Console (allora il pannello 'Feature flag'),
+  `Bordi lista in dissolvenza` / `Fading list edges`: con la classe `fx-fade` su `<html>` la lista
+  sfumava per 26px in cima e in fondo, con una `mask-image` a gradiente su `#rank-list`, invece di
+  troncarsi.
+- **Nato nella `v12.24`** (2026-07-25, commit `aedd15d`) coi primi effetti grafici, **tolto nella
+  `v12.39`** (2026-07-25), sostituito dal riflettore (`spot`) su richiesta dell'utente. Nei dati
+  salvati era già spento (`"fade":false`).
+- **Si recupera dal commit `cb11715`** del ramo `main`. Dove viveva: in `top/index.html`, la regola
+  `html.fx-fade #rank-list`, le voci `fade` di `SITE_FLAGS_DEFAULT` e di `SITE_FLAG_CLASS`, e la sua
+  riga nell'elenco degli effetti del pannello; nei dati, la chiave `fade` di `siteFlags` in
+  `dati.js`, che allora era nella cartella `top/`.
+- ⚠️ **Il nome è stato riusato**: dalla `v14.43` `fade` è una manopola della trama (`pat`), che non
+  ha niente a che fare con questo effetto.
+- Il comando che mostra la pagina di allora: `git show cb11715^:top/index.html`.
 
 ## 🏅 L'icona del badge della morte in battaglia
 
