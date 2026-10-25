@@ -117,8 +117,8 @@ Dalla `15.64`. Il sorgente commentato è **`index.src.html`**, il codice dell'am
   - ⚠️ **Il caso al limite**: il ripiego è qualche punto più stretto, quindi in una fascia di pochi px
     sotto la soglia in cui il titolo passa a una riga può entrarci col ripiego e non col vero (misurato
     su Arda a 1245px, solo con Cinzel bloccato). All'arrivo del carattere `pareggiaTitolo` rimisura.
-- ⚠️ **I sei file di `Cinzel Decorative` sono stati tolti dal repo con la `15.85`**: nessuna pagina li
-  chiedeva più dalla `15.73`.
+- ⚠️ **I file di `Cinzel Decorative` non sono più nel repo** (dettagli in `docs/Removed.md` § '🔤 I
+  sei file di `Cinzel Decorative`').
 - Il gemello 'I Grandi di Terramare' ha lo stesso impianto: le due cose si cambiano insieme.
 
 ## 🤖 Leggibile senza JavaScript e dagli agenti
@@ -396,8 +396,8 @@ colori del FAB reale.
   - ⚠️ **Un worker registrato sopravvive alla cancellazione del file**: togliendolo si fa anche
     l'unregister, o continua a governare lo scope nei browser altrui.
 - ⚠️ **Due icone per due temi di sistema NON sono possibili**: il manifest non conosce
-  `prefers-color-scheme`, e Android fissa l'icona all'installazione. La variante oro su blu è stata
-  tolta, e il generatore la rifà cambiando due valori.
+  `prefers-color-scheme`, e Android fissa l'icona all'installazione. La variante oro su blu non c'è
+  più (dettagli in `docs/Removed.md` § '📲 La variante oro su blu dell'icona dell'app').
 - ⚠️ **Il glifo si posiziona con `<g transform>`, non con un `<svg>` innestato**, che eredita le
   regole CSS su `svg` e si ridimensiona.
 - ⚠️ **Icona dell'app e favicon sono due cose distinte**, anche se condividono il glifo: quadrato
@@ -1234,19 +1234,19 @@ dell'editor; la parola d'ordine vive **solo in memoria** per la sessione. Deploy
 ### 🧹 Il campo paese è uscito dal dataset
 
 Il campo `paese` è stato tolto su richiesta dell'utente: era uniforme su tutte le voci, e nessuno lo
-leggeva.
+leggeva (dettagli in `docs/Removed.md` § '🗺️ Il campo `paese`').
 
 - **Da dove veniva**: dalla pagina **`legion50`**, capostipite di questo motore, che vive nella
-  storia git dell'hub (cartella `artifacts`): là `paese` era un codice ISO che pescava una bandiera.
-  ⚠️ **Un campo inspiegabile si cerca LÀ** prima di dedurne il significato.
+  storia git dell'hub (cartella `artifacts`). ⚠️ **Un campo inspiegabile si cerca LÀ** prima di
+  dedurne il significato.
 - ⚠️⚠️ **Perché valeva toglierlo**: un campo presente su ogni voce, uniforme e senza lettori, somiglia
   a un campo libero, e sul gemello un dato vi è finito dentro (`earthsea/Rules.md`, § 'Il campo
   origine').
 - **Perché era sicuro**: il Worker serializza ogni voce con `JSON.stringify(d)` e valida il solo
   `nome`, e l'editor lavora su una copia profonda dell'array, quindi non esiste un elenco di campi da
-  tenere allineato. ⚠️ Per `paese` è stato verificato **prima**, e dopo si è rifatta la prova: stesso
-  numero di voci, e l'unica chiave di differenza era quella tolta. Lo stesso metodo vale per ogni
-  campo tolto o rinominato.
+  tenere allineato. ⚠️ Si verifica **prima** di togliere, e dopo si rifà la prova: stesso numero di
+  voci, e l'unica chiave di differenza è quella tolta. Il metodo vale per ogni campo tolto o
+  rinominato.
 - ⚠️⚠️ **Una scheda admin già APERTA riscrive tutte le voci come le ha in memoria**, campi tolti
   compresi, senza conflitti né errori. Dopo una bonifica del dataset **si ricarica l'editor admin**
   prima di salvare.
@@ -1821,7 +1821,8 @@ motivate**, perché nei dati un'esclusione è indistinguibile da una dimenticanz
 ### Decisioni dell'utente da non ridiscutere
 
 - **Badge 'morì in battaglia': BOCCIATO.** Aveva circa 70 portatori, troppo diffuso per un badge
-  'eccezionale'. **Non si ripropone**; l'icona è stata tolta, e resta recuperabile da git.
+  'eccezionale'. **Non si ripropone**; l'icona non c'è più (dettagli in `docs/Removed.md`
+  § '🏅 L'icona del badge della morte in battaglia').
 - **Tutti gli Anelli su un'unica riga di legenda in coda**, con didascalia unica 'Portatore di uno
   degli Anelli del Potere'.
 - **Riga Re unica a due colonne**, al posto del Re 'in carica', che è diventato easter egg.
