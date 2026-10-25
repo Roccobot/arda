@@ -733,7 +733,8 @@ condivise con l'anteprima. In UI: tap sulla versione, sblocco, 'Area admin', qui
   `git show <commit>:arda/top/dati.js`), l'unica prova diretta di che cosa ha scritto un
   salvataggio.
 - ⚠️ **`fade` (bordi lista in dissolvenza) non esiste più**, sostituito dal riflettore su richiesta
-  dell'utente: non si reintroduce, ed è altra cosa dalla manopola `fade` della trama.
+  dell'utente: non si reintroduce, ed è altra cosa dalla manopola `fade` della trama (dettagli in
+  `docs/Removed.md` § '🌫️ L'effetto `fade`, i bordi della lista in dissolvenza').
 - ⚠️ **Il fondo per l'AA di un testo su strati semitrasparenti si COMPONE**: riquadro, card con
   l'alpha dello stato corrente e non di riposo, velo della pill. Stimato su un solo strato, scendeva
   sotto soglia dove le card sono accese.
@@ -1535,16 +1536,15 @@ si misura: desktop `1em ≈ 25.6px` CSS **sulla riga nome** della card, mobile `
 conversione dei pixel forniti dall'utente vive nel `Rules.md` dell'hub, § '📐 Misure in pixel →
 unità relative'.
 
-⚠️ **Fino alla `15.72` (e per le copie di confronto di quelle versioni), nell'ambiente Claude Code
-le webfont NON si caricavano da sole**: il foglio di Google Fonts
-risponde `ERR_CONNECTION_RESET` al browser di test, che non passa dal proxy come `curl`. Il browser
-ripiega su **Georgia**, e ogni misura di larghezza, a-capo o altezza di riga è **di un altro font**.
-La precondizione, la spia giusta (`document.fonts.size`, mai `document.fonts.check()`, che mente),
-che cosa dipende dal font e il conteggio delle righe vivono in `Roccobot.md` § '🧪 Test e verifiche
-(siti e app web)'.
+⚠️ **Dalla `15.73` i caratteri sono in casa** (§ '🔤 I caratteri sono in casa, e sono due famiglie'),
+quindi basta servire la pagina via HTTP perché il browser di test li carichi da sé. La precondizione,
+la spia giusta (`document.fonts.size`, mai `document.fonts.check()`, che mente), che cosa dipende dal
+font e il conteggio delle righe vivono in `Roccobot.md` § '🧪 Test e verifiche (siti e app web)'.
 
-- ⚠️ **Dalla `15.73` i caratteri sono in casa** (§ '🔤 I caratteri sono in casa, e sono due famiglie'),
-  quindi basta servire la pagina via HTTP e il problema non si presenta.
+- ⚠️ **Una copia di confronto fino alla `15.72` chiede ancora Google Fonts**, che dal browser di test
+  non arriva: senza l'aggancio qui sotto ripiega su **Georgia**, e ogni misura di larghezza, a-capo o
+  altezza di riga è **di un altro font** (la storia è in `docs/Removed.md` § '🌐 Google Fonts, e le
+  misure fatte senza i caratteri veri').
 - **L'aggancio è COMMITTATO: `.memo/scripts/realfont.js`** dell'hub, che serve anche Terramare.
   Istruzioni, spia attesa ed `executablePath: rf.chromiumPath()` sono nel commento in testa allo
   script; se cambiano le famiglie di font del sito si riallinea la sua costante `GF`.
