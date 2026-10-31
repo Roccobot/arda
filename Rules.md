@@ -317,7 +317,7 @@ desktop e mobile, il click porta **dritto all'editor**, chiudendo prima il panne
 
 ### ⚠️ Gate W3C
 
-- **A ogni release da +0,1 in su** (non ai +0,01), **prima di aprire la PR**: Nu Html Checker su
+- **A ogni funzionalità o release maggiore** (un decimale o un intero nuovo, non i ritocchi da +0,01), **prima di aprire la PR**: Nu Html Checker su
   **tutte le pagine modificate**, a **0 errori E 0 warning**, compresi gli `info` con
   `subType:"warning"` (pulizia totale voluta dall'utente). La regola madre, col 'se il validatore non
   è disponibile si annota il salto e si procede', vive in `Roccobot.md` § '🧪 Test e verifiche (siti
@@ -365,7 +365,7 @@ desktop e mobile, il click porta **dritto all'editor**, chiudendo prima il panne
 - **`roccobot.me` sopra, versione sotto**, incolonnati nell'angolo (mockup dell'utente): in cima si
   vedono entrambi, scorrendo resta il solo `roccobot.me`, fisso.
 - **I salvataggi admin bumpano di +0,01**, quindi la versione è un contatore di revisioni dei
-  contenuti; +0,1 e +1,0 li decidono solo i commit di codice. Come il Worker applica il bump lo dice
+  contenuti; il passo al decimale o all'intero successivo lo decidono solo i commit di codice. Come il Worker applica il bump lo dice
   `worker/Rules.md`, § '🔌 Il Worker `arda-admin-proxy`'.
 - **Il bivio modale sul tap della versione mobile è stato tolto**, perché su mobile il riordino si
   attivava ma non si poteva salvare: tutti gli accessi vanno dritti all'editor.

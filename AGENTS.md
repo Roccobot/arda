@@ -308,7 +308,7 @@ Un file più specifico vince **dove parla**, e il suo silenzio non è una deroga
   (`Rules.md` § '🔢 Versione del sito').
 - **Verifica di pubblicazione**: `datiVersion` su <https://roccobot.github.io/arda/dati.js>,
   letto con `Cache-Control: no-cache` (`Rules.md` § '🔢 Versione del sito').
-- **Gate W3C a ogni release da +0,1 in su**, prima della PR: Nu Html Checker a 0 errori e 0
+- **Gate W3C a ogni funzionalità o release maggiore** (non ai ritocchi), prima della PR: Nu Html Checker a 0 errori e 0
   warning sulle pagine modificate, e le regole iniettate via JS non tornano nel CSS statico
   (`Rules.md` § '⚠️ Gate W3C').
 - **Non derogabili in questo repo**: parola d'ordine admin validata solo dal Worker e `GITHUB_PAT`
