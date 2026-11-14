@@ -972,7 +972,7 @@ function injectFxEditorCss(){
     '.fx-gear{display:inline-flex;align-items:center;justify-content:center;width:1.7rem;height:1.7rem;',
     'padding:0;background:none;border:1px solid rgba(140,145,160,0.4);border-radius:6px;color:inherit;',
     'cursor:pointer;opacity:0.75;transition:opacity 0.15s,border-color 0.15s}',
-    '.fx-gear:hover{opacity:1;border-color:rgba(140,145,160,0.75)}',
+    '.fx-gear:hover,.fx-gear:focus-visible{opacity:1;border-color:rgba(140,145,160,0.75);outline:none}',
     // 0.62em (non 0.5): a 0.5em il corpo scendeva a ~7.6px, illeggibile e sotto
     // la soglia di contrasto per il testo piccolo.
     '.fxp-pill{display:inline-block;font-size:0.62em;font-weight:400;letter-spacing:0.03em;',
@@ -989,13 +989,14 @@ function injectFxEditorCss(){
     // disegnata in ::after (due lati di un rettangolo ruotati di 45°, il modo
     // classico di ottenere un segno di spunta pulito senza SVG né font).
     // Vincoli rispettati: il bersaglio di tocco resta la label da 24px (v12.75),
-    // il focus da tastiera resta visibile (outline proprio) e il contrasto del
+    // il focus da tastiera prende lo stile di hover (see below) e il contrasto del
     // segno sul fondo acceso è ampiamente sopra il 3:1 richiesto per gli elementi
     // non testuali. `accent-color` non basterebbe: cambia la tinta, non la forma.
     '#fx-modal input[type=checkbox],#fab-modal input[type=checkbox]{appearance:none;-webkit-appearance:none;',
     'position:relative;flex:none;width:1.05rem;height:1.05rem;margin:0;border-radius:4px;cursor:pointer;',
     'border:1.5px solid rgba(140,145,160,0.75);background:transparent;transition:background 0.15s,border-color 0.15s}',
-    '#fx-modal input[type=checkbox]:hover,#fab-modal input[type=checkbox]:hover{border-color:rgba(160,180,205,0.95)}',
+    '#fx-modal input[type=checkbox]:hover,#fab-modal input[type=checkbox]:hover,',
+    '#fx-modal input[type=checkbox]:focus-visible,#fab-modal input[type=checkbox]:focus-visible{border-color:rgba(160,180,205,0.95);outline:none}',
     '#fx-modal input[type=checkbox]:checked,#fab-modal input[type=checkbox]:checked{',
     'background:rgba(122,166,205,0.95);border-color:rgba(122,166,205,0.95)}',
     'html[data-theme="light"] #fx-modal input[type=checkbox]:checked,html[data-theme="light"] #fab-modal input[type=checkbox]:checked{',
@@ -1003,10 +1004,10 @@ function injectFxEditorCss(){
     '#fx-modal input[type=checkbox]:checked::after,#fab-modal input[type=checkbox]:checked::after{content:"";position:absolute;',
     'left:50%;top:47%;width:0.3rem;height:0.56rem;border:solid #fff;border-width:0 2px 2px 0;',
     'transform:translate(-50%,-50%) rotate(45deg)}',
-    // Focus da tastiera: anello proprio, perché con appearance:none quello nativo
-    // sparisce insieme al disegno della casella.
-    '#fx-modal input[type=checkbox]:focus-visible,#fab-modal input[type=checkbox]:focus-visible{',
-    'outline:2px solid rgba(154,192,216,0.95);outline-offset:2px}',
+    // Keyboard focus = hover, never a ring (Ambito-01; up to 15.88 a ring of its own).
+    // A ticked box hides the hover border under its fill, so hover and focus brighten it.
+    '#fx-modal input[type=checkbox]:checked:hover,#fab-modal input[type=checkbox]:checked:hover,',
+    '#fx-modal input[type=checkbox]:checked:focus-visible,#fab-modal input[type=checkbox]:checked:focus-visible{filter:brightness(1.2)}',
     // Riga o sezione SPENTA (v12.95): la sua casella di controllo è spenta, quindi
     // le impostazioni non si applicano. Semitrasparente e non modificabile, ma
     // l'opacità resta 0.5 e non meno: sotto, il testo scenderebbe fuori soglia di
@@ -1052,6 +1053,11 @@ function injectFxEditorCss(){
     // 24px minimi di WCAG 2.2 (2.5.8). Il track resta visivamente com'era, cresce
     // solo la zona sensibile.
     '.fxk-row input[type=range]{grid-column:1/3;width:100%;height:24px;margin:0}',
+    // Keyboard focus = hover, never a ring (Ambito-01): the native slider brightens, the
+    // menu and the colour swatch take the checkbox hover border.
+    '.fxk-row input[type=range]:hover,.fxk-row input[type=range]:focus-visible{filter:brightness(1.2);outline:none}',
+    '.fxk-row .fxk-sel:hover,.fxk-row .fxk-sel:focus-visible,.fxk-row .fxk-col:hover,.fxk-row .fxk-col:focus-visible{',
+    'border-color:rgba(160,180,205,0.95);outline:none}',
     '.fxk-row .fxk-note{grid-column:1/3;font-size:0.72rem;opacity:0.62;line-height:1.35;margin:-0.15rem 0 0}'
   ].join('');
   document.head.appendChild(st);
@@ -2084,8 +2090,11 @@ function baInjectEditorCss(){
   var css = [
     '.ba-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 0.7rem;}',
     '.ba-chip{position:relative;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid rgba(128,128,128,0.35);border-radius:8px;background:transparent;color:inherit;font:inherit;font-size:0.8rem;cursor:pointer;white-space:nowrap;}',
-    '.ba-chip:hover{border-color:rgba(128,128,128,0.6);}',
+    // Keyboard focus = hover, never a ring (Ambito-01), here and in the rules below.
+    '.ba-chip:hover,.ba-chip:focus-visible{border-color:rgba(128,128,128,0.6);outline:none;}',
     '.ba-chip.on{border-color:#c8a24a;box-shadow:inset 0 0 0 1px #c8a24a;background:rgba(200,162,74,0.14);}',
+    // The chosen chip hides the hover border under its own: hover and focus deepen its fill.
+    '.ba-chip.on:hover,.ba-chip.on:focus-visible{background:rgba(200,162,74,0.26);}',
     '.ba-grp{font-size:0.62rem;font-weight:700;background:#c8a24a;color:#1a1a1a;border-radius:20px;padding:0 5px;}',
     '.ba-selhead{font-size:0.86rem;margin:0 0 0.7rem;}',
     // Corpo: campi a SINISTRA (colonna stretta), anteprime a DESTRA (impilate).
@@ -2102,12 +2111,14 @@ function baInjectEditorCss(){
     '.ba-fline input.ba-num{width:76px;flex:none;box-sizing:border-box;padding:5px 7px;border:1px solid rgba(128,128,128,0.45);border-radius:6px;background:transparent;color:inherit;font-family:ui-monospace,monospace;font-size:0.8rem;text-align:right;}',
     // Slider a DESTRA, con TRACCIA visibile e pallino accento (non piu il tondo blu di default del browser).
     '.ba-fline input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:60px;height:5px;border-radius:5px;background:rgba(128,128,128,0.32);outline:none;margin:0;}',
+    // The track had no hover change: hover and keyboard focus darken it.
+    '.ba-fline input[type=range]:hover,.ba-fline input[type=range]:focus-visible{background:rgba(128,128,128,0.55);}',
     '.ba-fline input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#c8a24a;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.3);}',
     '.ba-fline input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:#c8a24a;cursor:pointer;}',
     'html[data-theme="light"] .ba-fline input[type=range]::-webkit-slider-thumb{background:#1f5562;}',
     'html[data-theme="light"] .ba-fline input[type=range]::-moz-range-thumb{background:#1f5562;}',
     '.ba-reset{margin-top:0.55rem;font-size:0.74rem;background:none;border:none;color:inherit;opacity:0.7;cursor:pointer;text-decoration:underline;padding:0;}',
-    '.ba-reset:hover{opacity:1;}',
+    '.ba-reset:hover,.ba-reset:focus-visible{opacity:1;outline:none;}',
     // Anteprime impilate (scuro sopra, chiaro sotto), un po piu grandi.
     '.ba-pvgrid{display:flex;flex-direction:column;gap:10px;}',
     // Anteprima a dimensione REALE (font 1.5rem, badge 0.92em, gap 0.32em come
@@ -2134,6 +2145,8 @@ function baInjectEditorCss(){
     // Tabella riepilogo SEMPRE visibile in basso: riempie lo spazio residuo della
     // modale (flex:1) e scorre da sola; la modale non scrolla (niente doppio scroll).
     '.ba-tablewrap{flex:1 1 auto;min-height:0;margin-top:0.8rem;border:1px solid rgba(128,128,128,0.3);border-radius:9px;overflow:auto;}',
+    // Focusable on purpose (keyboard scrolling): its border brightens, with no ring.
+    '.ba-tablewrap:hover,.ba-tablewrap:focus-visible{border-color:rgba(128,128,128,0.65);outline:none;}',
     '.ba-table{width:100%;border-collapse:collapse;font-size:0.74rem;}',
     '.ba-table th,.ba-table td{padding:5px 9px;text-align:right;border-bottom:1px solid rgba(128,128,128,0.22);white-space:nowrap;font-variant-numeric:tabular-nums;}',
     '.ba-table th:first-child,.ba-table td:first-child{text-align:left;}',
@@ -2733,7 +2746,9 @@ function showColorEditor(initState) {
     srow.appendChild(document.createTextNode(it?'Ultimo salvato (clic per ripristinare):':'Last saved (click to restore):'));
     var restoreBtn = document.createElement('button');
     restoreBtn.title = it?'Ripristina l\'ultimo colore salvato (chiaro e scuro)':'Restore the last saved colour (light and dark)';
-    restoreBtn.style.cssText = 'display:inline-flex;gap:3px;align-items:center;border:1px solid rgba(128,128,128,0.5);border-radius:6px;cursor:pointer;padding:2px 4px;background:transparent;';
+    // The border lives in `.cc-restore` (main sheet), so hover and keyboard focus can change it.
+    restoreBtn.className = 'cc-restore';
+    restoreBtn.style.cssText = 'display:inline-flex;gap:3px;align-items:center;border-radius:6px;cursor:pointer;padding:2px 4px;background:transparent;';
     [saved.light, saved.dark].forEach(function(hx){ var s = document.createElement('span'); s.style.cssText = 'width:20px;height:16px;border-radius:3px;display:inline-block;background:' + hx + ';'; restoreBtn.appendChild(s); });
     restoreBtn.onclick = function(){ ctrl.set(saved.dark, saved.light); showToast(it?'✓ Ripristinato colore salvato':'✓ Restored saved colour', false); };
     srow.appendChild(restoreBtn);
@@ -2813,6 +2828,8 @@ function showColorEditor(initState) {
     var baseInput = document.createElement('input'); baseInput.type = 'color'; baseInput.setAttribute('aria-label', it ? 'Selettore colore' : 'Colour picker');
     baseInput.value = ccTheme() === 'light' ? initLight : initDark;
     baseInput.style.cssText = 'position:absolute;width:0;height:0;opacity:0;pointer-events:none;';
+    // Out of the Tab order: it is invisible, and 'Pick colour' right after opens it.
+    baseInput.tabIndex = -1;
     var chooseBtn = document.createElement('button'); chooseBtn.className = 'fab-modal-confirm';
     chooseBtn.style.cssText = 'width:auto;padding:0.5rem 1.1rem;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.5rem;';
     var baseSw = document.createElement('span'); baseSw.style.cssText = 'width:18px;height:18px;border-radius:4px;border:1px solid rgba(128,128,128,0.5);display:inline-block;background:' + baseInput.value + ';';
