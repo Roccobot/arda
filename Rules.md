@@ -572,8 +572,9 @@ classifica è lunga.
   alla ricerca admin, che è un'altra modale.
 - ⚠️ **Il campo di ricerca NON ha anello di fuoco**: in un campo di testo l'indicatore è il caret, e i
   browser trattano gli input di testo come sempre `focus-visible`, quindi l'anello comparirebbe
-  anche aprendo col dito. ⚠️⚠️ **Non vale per i RISULTATI**: `.ss-hit:focus-visible` resta, perché là
-  il fondo è l'unico segno della riga raggiunta col Tab.
+  anche aprendo col dito. ⚠️⚠️ **I RISULTATI invece un segno lo hanno**: `.ss-hit:focus-visible` dà
+  alla riga raggiunta col Tab il fondo del suo hover, senza anello, come vuole la regola sul fuoco
+  da tastiera (§ '⌨️ Il fuoco da tastiera non disegna anelli').
 - ⚠️⚠️ **Su TOUCH la × non c'è** (istruzione dell'utente, come su Terramare): il velo basta a
   chiudere, e il tasto occupava l'angolo di una modale già stretta. Il percorso della decisione e la
   strada scartata (chiudere dalla cornice della modale) vivono in `earthsea/Rules.md`, § 'E su TOUCH
@@ -698,7 +699,8 @@ condivise con l'anteprima. In UI: tap sulla versione, sblocco, 'Area admin', qui
   sistema cardcolor, quindi serve un ramo che riporti `:hover` al fondo di riposo. Togliere la
   regola non basta: sotto ci sono le vecchie regole di Classe, mute solo grazie a un `!important`.
 - ⚠️ **Il `:focus-within` non dipende dall'interruttore**: è l'indicatore di focus da tastiera (WCAG
-  2.4.7), e un effetto estetico non lo governa.
+  2.4.7), cioè lo stile di hover della card che la regola sul fuoco vuole (§ '⌨️ Il fuoco da
+  tastiera non disegna anelli'), e un effetto estetico non lo governa.
 - ⚠️ **Un colore semitrasparente va riportato in sRGB**, non lasciato in `oklch()`: Chromium lo
   compone in oklab, e il fondo si spostava di qualche unità su un canale anche con le manopole
   neutre. Il colore opaco non ha il problema.
@@ -749,7 +751,8 @@ condivise con l'anteprima. In UI: tap sulla versione, sblocco, 'Area admin', qui
 - ⚠️ **I tasti salto si rivelano col focus da tastiera**: a opacità 0 ma nella tabulazione, il focus
   ci finiva invisibile (WCAG 2.4.7, che axe non intercetta). Serve `!important`, perché la
   dissolvenza usa uno stile inline. Scelta di merito: rivelarli, non toglierli dalla tabulazione,
-  perché servono a chi naviga senza mouse.
+  perché servono a chi naviga senza mouse. Il tasto raggiunto prende il suo hover, senza anello
+  (§ '⌨️ Il fuoco da tastiera non disegna anelli').
 - ⚠️ **L'emulazione non riproduce il touch reale**: il trascinamento del pallino di un
   `input[type=range]` non è verificabile con eventi sintetici, e il test fallisce identico prima e
   dopo. Prima di accusare una modifica si rifà la prova sulla versione precedente.
@@ -802,8 +805,8 @@ condivise con l'anteprima. In UI: tap sulla versione, sblocco, 'Area admin', qui
 - ⚠️ **Le didascalie descrittive sono state tolte ovunque**, superflue per l'utente: il pannello è
   una lista pulita di interruttori. Non si reintroducono.
 - **Segno di spunta minimale, esteso a tutto il sito.** Il bersaglio di tocco resta la **label da
-  24px**; il focus da tastiera ha un anello proprio, perché spegnendo il disegno nativo spariva anche
-  quello; fondo e colore del segno restano quelli storici, così i contrasti verificati non si
+  24px**; il focus da tastiera prende l'hover della casella, senza anello (dalla `15.89`, § '⌨️ Il
+  fuoco da tastiera non disegna anelli'); fondo e colore del segno restano quelli storici, così i contrasti verificati non si
   muovono. `accent-color` non basta: cambia la tinta, non la forma. ⚠️ Nell'editor personaggi i
   margini della casella restano quelli dell'UA, o si stringe la griglia dei badge.
 - **Bersagli di tocco da 24px** (WCAG 2.5.8): sugli slider cresce solo la zona sensibile, e il binario
@@ -1483,7 +1486,8 @@ l'ombra portata non si riscrive due volte.
 - ⚠️ **L'accessibilità WCAG AA è un vincolo permanente del sito**: ogni modifica a grafica, colori o
   opacità resta conforme, e i valori tarati sulla soglia non si alzano senza rimisurare. Sulle card
   axe non valuta il contrasto, e la verifica si fa sui pixel ('🎨 Colore card (sistema cardcolor)',
-  voce sulle trappole).
+  voce sulle trappole). Il fuoco da tastiera resta visibile senza anelli, con lo stile di hover
+  (§ '⌨️ Il fuoco da tastiera non disegna anelli').
 - ⚠️ **L'audit axe si esegue con TUTTE le categorie attive**: due sono spente di default, e i badge di
   quelle categorie resterebbero fuori.
 
@@ -1528,6 +1532,29 @@ fonti locali:
   **Corretto** Arwen 'Stella della Sera' (inventato) in **'Stella del Vespro'**, che traduce
   Evenstar. **Tenuti apposta:** Imrahil 'il Bello' (verbatim, SdA V.6), Bilbo 'il Magnifico'
   (epiteto di Thranduil, fine dello Hobbit) e Arwen 'Gioiello degli Elfi'.
+
+## ⌨️ Il fuoco da tastiera non disegna anelli
+
+- ⚠️⚠️ **Dalla `15.89` nessun comando raggiunto col Tab disegna un anello** (né `outline`, né
+  `box-shadow`, né l'anello di serie del browser): prende lo stile del suo hover, colore o fondo, e
+  il sito resta usabile con la sola tastiera (WCAG 2.4.7). È la regola universale di `Roccobot.md`
+  § '⌨️ La navigazione con la tastiera non si vede', che l'utente ha voluto anche qui (scelta
+  `Ambito-01`, 2026-11-13).
+- **Come si scrive**: `:focus-visible` nella stessa regola del `:hover`, con `outline:none`, e la
+  variante del tema chiaro accanto alla sua; mai `outline:none` da solo, che lascia la tastiera
+  senza segno.
+- ⚠️ **Un comando nuovo nasce con la coppia hover e fuoco**: l'anello di serie compare dove nessuna
+  regola tocca `outline`, ed è così che fino alla `15.88` lo disegnava gran parte dei comandi.
+- ⚠️ **Dove l'hover non cambiava niente, dalla `15.89` cambia insieme al fuoco**: il titolone (più
+  luminoso in scuro, più scuro in chiaro, così il suo 3,20:1 sale), 'Roccobot' del crest (il colore
+  pieno del testo), l'interruttore 'Apocrifi', i tasti `Indietro`, `Salva` e `Cerca` dell'editor
+  admin, slider e menu della Console. Una casella spuntata, una riga di legenda accesa e un chip
+  scelto nascondevano l'hover sotto il loro stato: hover e fuoco ne accendono il fondo.
+- **Il campo di testo non cambia**: il segno è il caret. Sul telefono la barra del Pannello prende
+  il fondo col solo fuoco, perché col tocco l'hover resterebbe appiccicato.
+- **Si prova sulla pagina vera**: Tab reali, e per ogni comando raggiunto nessun `outline` e un
+  cambio sui pixel rispetto al riposo, nei due temi, a 1280 e 390 px, area admin compresa.
+- Il gemello 'I Grandi di Terramare' segue la stessa regola: le due cose si cambiano insieme.
 
 ## 🔬 Misure tipografiche: servire i font REALI ai test
 
