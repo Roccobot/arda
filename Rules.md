@@ -1552,8 +1552,11 @@ fonti locali:
   scelto nascondevano l'hover sotto il loro stato: hover e fuoco ne accendono il fondo.
 - **Il campo di testo non cambia**: il segno è il caret. Sul telefono la barra del Pannello prende
   il fondo col solo fuoco, perché col tocco l'hover resterebbe appiccicato.
-- **Si prova sulla pagina vera**: Tab reali, e per ogni comando raggiunto nessun `outline` e un
-  cambio sui pixel rispetto al riposo, nei due temi, a 1280 e 390 px, area admin compresa.
+- **Si prova sulla pagina vera con `scripts/test-keyboard-focus.js`**: Tab reali, e per ogni
+  comando raggiunto nessun `outline` e un cambio sui pixel rispetto al riposo, nei due temi, a 1280
+  e 390 px, area admin compresa. Si serve via HTTP la cartella che contiene `arda/` e si lancia con
+  `PROVA_URL=http://127.0.0.1:8770/arda/index.html`; il comando completo è in testa al file. Sulla
+  `15.89` passano tutte le 384 prove, sulla `15.88` ne fallivano 280.
 - Il gemello 'I Grandi di Terramare' segue la stessa regola: le due cose si cambiano insieme.
 
 ## 🔬 Misure tipografiche: servire i font REALI ai test
